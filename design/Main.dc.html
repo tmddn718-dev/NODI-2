@@ -83,9 +83,9 @@ body{font-variant-numeric:tabular-nums}
             <div ref="{{ chatRef }}" onScroll="{{ onChatScroll }}" style="position:absolute;top:146px;left:0;right:0;bottom:{{ chatBottom }}px;overflow-y:auto;scrollbar-width:none;padding:8px 16px 32px;display:flex;flex-direction:column;gap:12px;">
               <div style="align-self:center;font-size:13px;font-weight:500;color:#5B6B81;padding:4px 0;">오늘 · 11월 16일 (월)</div>
               <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="2">
-                <sc-if value="{{ m.isUser }}"><div style="align-self:flex-end;max-width:84%;background:#3654D4;color:#FFFFFF;padding:12px 16px;border-radius:16px 16px 4px 16px;font-size:16px;line-height:1.5;white-space:pre-wrap;">{{ m.text }}</div></sc-if>
+                <sc-if value="{{ m.isUser }}"><div data-mid="{{ m.id }}" style="align-self:flex-end;max-width:84%;background:#3654D4;color:#FFFFFF;padding:12px 16px;border-radius:16px 16px 4px 16px;font-size:16px;line-height:1.5;white-space:pre-wrap;">{{ m.text }}</div></sc-if>
                 <sc-if value="{{ m.isAi }}">
-                  <div style="display:flex;gap:8px;align-items:flex-end;max-width:88%;">
+                  <div data-mid="{{ m.id }}" style="display:flex;gap:8px;align-items:flex-end;max-width:88%;">
                     <img src="assets/nodi-symbol.svg" alt="" style="width:32px;height:32px;flex-shrink:0;display:block;">
                     <div style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgb(24 36 58 / 0.04);color:#18243A;padding:12px 16px;border-radius:16px 16px 16px 4px;font-size:16px;line-height:1.55;white-space:pre-wrap;text-wrap:pretty;">{{ m.text }}</div>
                   </div>
@@ -147,6 +147,7 @@ body{font-variant-numeric:tabular-nums}
                   </div>
                 </sc-if>
               </sc-for>
+              <div data-spacer aria-hidden="true" style="flex-shrink:0;height:0;"></div>
             </div>
             <sc-if value="{{ showNewMsg }}" hint-placeholder-val="{{ false }}">
               <button onClick="{{ onJumpBottom }}" style="position:absolute;left:50%;transform:translateX(-50%);bottom:{{ newMsgBottom }}px;z-index:5;height:44px;padding:0 16px;border-radius:22px;border:none;background:#18243A;color:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgb(24 36 58 / 0.16);display:flex;align-items:center;gap:8px;">새 메시지</button>
@@ -1125,7 +1126,15 @@ class Component extends DCLogic {
     const s=this.state,el=this.chatRef.current;
     if(el&&s.screen==='chat'){
       const msgsChanged=ps.msgs!==s.msgs,entered=ps.screen!=='chat',kbChanged=ps.kb!==s.kb;
-      if(entered||kbChanged||this.forceScroll||(msgsChanged&&this.atBottom)){this.forceScroll=false;requestAnimationFrame(()=>{el.scrollTop=el.scrollHeight;this.atBottom=true});if(s.newMsg)this.setState({newMsg:false})}
+      // 새 입력·선택이 생기면 그 메시지(조건 카드가 나오면 그 안내 문구)를 화면 맨 위에 맞춰, 입력 결과가 바로 보이게 한다
+      if(msgsChanged){const nc=s.msgs.findIndex((m,i)=>m.kind==='conds'&&!ps.msgs.includes(m));if(nc>0&&s.msgs[nc-1].kind==='ai')this.anchorId=s.msgs[nc-1].id}
+      if(this.anchorId&&!entered&&!kbChanged){
+        const sp=el.querySelector('[data-spacer]'),a=el.querySelector(`[data-mid="${this.anchorId}"]`);
+        if(sp&&a){sp.style.height='0px';sp.style.height=Math.max(0,el.clientHeight-(sp.offsetTop-a.offsetTop)-8)+'px';
+          if(msgsChanged||this.forceScroll){this.forceScroll=false;const top=Math.max(0,a.offsetTop-8);el.scrollTo({top,behavior:'smooth'});this.atBottom=true;if(s.newMsg)this.setState({newMsg:false})}
+          else if(this.lastTop!=null)el.scrollTop=this.lastTop}
+      }
+      else if(entered||kbChanged||this.forceScroll||(msgsChanged&&this.atBottom)){this.forceScroll=false;requestAnimationFrame(()=>{el.scrollTop=el.scrollHeight;this.atBottom=true});if(s.newMsg)this.setState({newMsg:false})}
       else if(msgsChanged&&!this.atBottom&&!s.newMsg)this.setState({newMsg:true});
     }
     if(s.screen==='recs'&&s.recState!=='loading'&&s.recState!=='error'&&!this.recsValid())this.startRecalc();
@@ -1133,7 +1142,7 @@ class Component extends DCLogic {
     if(ps.reschedAsk&&!s.reschedAsk&&s.screen==='detail')requestAnimationFrame(()=>this.trigRef.current&&this.trigRef.current.focus());
   }
   toast(text){this.setState({toast:text});clearTimeout(this.tt);this.tt=setTimeout(()=>this.setState({toast:null}),2800)}
-  reset=()=>{this.busy=false;['failedOnce','netFailedOnce','changedOnce','conflictOnce'].forEach(k=>this[k]=false);this.confirmKey=null;this.forceScroll=true;this.setState({...BLANK,guide:null,msgs:initMsgs()})};
+  reset=()=>{this.busy=false;this.anchorId=null;this.lastTop=null;['failedOnce','netFailedOnce','changedOnce','conflictOnce'].forEach(k=>this[k]=false);this.confirmKey=null;this.forceScroll=true;this.setState({...BLANK,guide:null,msgs:initMsgs()})};
   push(items,extra){this.setState(s=>({msgs:[...s.msgs.filter(m=>m.kind!=='typing'),...items.map(i=>({id:this.id(),...i}))],...(extra||{})}))}
   extractState(g){
     // 필수: 날짜(또는 직접 선택 예정) · 회의 길이. 모호한 값은 확정하지 않고 확인 대상으로 둔다.
@@ -1155,10 +1164,10 @@ class Component extends DCLogic {
   pickGuide=(step,o)=>{
     if(this.busy)return;
     if(o.free){this.setState(s=>({msgs:s.msgs.filter(m=>m.kind!=='choice'),guide:{...(s.guide||{}),step}}));requestAnimationFrame(()=>{const el=document.getElementById('nodi-chat-input');if(el)el.focus()});return}
-    this.busy=true;this.forceScroll=true;const g0=this.state.guide||{},amb={...(g0.amb||{})};if(step==='whenAmb')delete amb.days;if(step==='pref')delete amb.timePref;
+    this.busy=true;this.forceScroll=true;const uid=this.id();this.anchorId=uid;const g0=this.state.guide||{},amb={...(g0.amb||{})};if(step==='whenAmb')delete amb.days;if(step==='pref')delete amb.timePref;
     const src={...(g0.src||{})};Object.keys(o.set||{}).forEach(k=>{if(['type','duration','days','timePref'].includes(k))src[k]='pick'});
     const g={...g0,...o.set,amb,src,step};
-    this.setState(s=>({guide:g,msgs:[...s.msgs.filter(m=>m.kind!=='choice'&&m.kind!=='chips'),{id:this.id(),kind:'user',text:o.l},{id:'typing',kind:'typing'}]}));
+    this.setState(s=>({guide:g,msgs:[...s.msgs.filter(m=>m.kind!=='choice'&&m.kind!=='chips'),{id:uid,kind:'user',text:o.l},{id:'typing',kind:'typing'}]}));
     this.t(()=>{this.busy=false;
       this.askNext(g,step==='type'?'좋아요.':'')},600)};
   finishGuide(g){const src={...(g.src||{})};['type','duration','days','timePref'].forEach(k=>{if(g[k]!=null&&!src[k])src[k]='pick'});if(g.mode)src.mode=src.mode||'ai';
@@ -1166,8 +1175,8 @@ class Component extends DCLogic {
     this.push([{kind:'ai',text:g.days?'회의 조건을 정리했어요. 맞는지 확인해 주세요.':'정리했어요. 날짜는 조건 카드에서 골라 주세요.'},{kind:'conds',snap:c}],{conds:c,guide:null})}
   send=(arg)=>{
     const text=(typeof arg==='string'?arg:this.state.input).trim();
-    if(!text||this.busy)return;this.busy=true;this.forceScroll=true;
-    this.setState(s=>({input:'',msgs:[...s.msgs.filter(m=>m.kind!=='chips'&&m.kind!=='choice'),{id:this.id(),kind:'user',text},{id:'typing',kind:'typing'}]}));
+    if(!text||this.busy)return;this.busy=true;this.forceScroll=true;const uid=this.id();this.anchorId=uid;
+    this.setState(s=>({input:'',msgs:[...s.msgs.filter(m=>m.kind!=='chips'&&m.kind!=='choice'),{id:uid,kind:'user',text},{id:'typing',kind:'typing'}]}));
     this.t(()=>{this.busy=false;this.respond(text)},900);
   };
   respond(text){
@@ -1234,7 +1243,7 @@ class Component extends DCLogic {
     const same=String([...s.draftSel].sort())===String([...s.selected].sort())&&String(Object.keys(req).sort())===String(Object.keys(s.required).sort())&&s.draftPolicy===s.policy;
     const had=(!!s.recs||s.pick!=null)&&!same;
     this.forceScroll=true;
-    this.setState(st=>({sheet:null,draftKept:false,selected:[...s.draftSel],required:req,policy:s.draftPolicy,attendeesDone:true,pick:had?null:st.pick,invalidated:had,remind:same?st.remind:null,conds:st.conds?{...st.conds,confirmed:true}:st.conds,msgs:[...st.msgs,{id:this.id(),kind:'user',text:`${names}님과 회의할게요`},{id:'typing',kind:'typing'}]}));
+    this.setState(st=>({sheet:null,draftKept:false,selected:[...s.draftSel],required:req,policy:s.draftPolicy,attendeesDone:true,pick:had?null:st.pick,invalidated:had,remind:same?st.remind:null,conds:st.conds?{...st.conds,confirmed:true}:st.conds,msgs:[...st.msgs,{id:(this.anchorId=this.id()),kind:'user',text:`${names}님과 회의할게요`},{id:'typing',kind:'typing'}]}));
     if(s.screen==='recs'&&had)this.toast('참석자·일정 필수가 바뀌어 이전 추천을 지웠어요');
     const rn=Object.keys(req).length;
     const pol=s.draftPolicy==='all'?'모든 참석자의 일정이 맞는 시간을 찾을게요.':(rn?`일정 필수 참석자 ${rn}명의 조건을 먼저 맞추고, 다른 분들의 참여도 최대한 반영할게요.`:'참여할 수 있는 사람이 가장 많은 시간을 찾을게요.');
@@ -1569,7 +1578,7 @@ class Component extends DCLogic {
       onSkipSplash:()=>this.setState({screen:'chat'}),onReplaySplash:()=>{this.setState({screen:'splash'});this.t(()=>this.state.screen==='splash'&&this.setState({screen:'chat',tab:'new'}),1600)},
       onReset:this.reset,onSettings:()=>this.setState({prevScreen:scr,screen:'settings',kb:false}),
       chatRef:this.chatRef,dlgRef:this.dlgRef,trigRef:this.trigRef,msgs,suggestions:SUGG.map(t=>({text:t,onClick:()=>this.send(t)})),
-      onChatScroll:e=>{const el=e.currentTarget,ab=el.scrollHeight-el.scrollTop-el.clientHeight<48;this.atBottom=ab;if(ab&&s.newMsg)this.setState({newMsg:false})},
+      onChatScroll:e=>{const el=e.currentTarget;this.lastTop=el.scrollTop;const ab=el.scrollHeight-el.scrollTop-el.clientHeight<48;this.atBottom=ab;if(ab&&s.newMsg)this.setState({newMsg:false})},
       showNewMsg:s.newMsg&&scr==='chat',newMsgBottom:chatBottom+8,onJumpBottom:()=>{const el=this.chatRef.current;if(el)el.scrollTop=el.scrollHeight;this.atBottom=true;this.setState({newMsg:false})},
       composerBottom,chatBottom,composerBorder:s.kb?'2px solid #3654D4':'1px solid #E2E8F0',showKb:scr==='chat'&&s.kb,kbRows,onFocusInput:()=>{if(!s.kb)this.setState({kb:true})},onHideKb:()=>this.setState({kb:false}),
       typingDots:React.createElement('div',{style:{display:'flex',gap:4,padding:'18px 16px'}},[0,1,2].map(i=>React.createElement('span',{key:i,style:{width:7,height:7,borderRadius:4,background:'#5B6B81',animation:`nodiDot 1s ${i*0.15}s infinite ease-in-out`}}))),
