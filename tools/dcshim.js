@@ -46,7 +46,7 @@
     for(const a of Array.from(node.attributes)){const n=a.name;
       if(n.startsWith('hint-'))continue;
       const val=interp(a.value,scopes);
-      if(EV[n]){if(typeof val==='function'){el.addEventListener(EV[n],e=>{val(e)})}continue}
+      if(EV[n]){if(typeof val==='function'){el.addEventListener(EV[n],e=>{if(!e.nativeEvent)e.nativeEvent=e;val(e)})}continue}
       if(n==='ref'){if(val&&typeof val==='object')val.current=el;continue}
       if(n==='value'&&(tag==='input'||tag==='textarea')){el.value=val==null?'':val;continue}
       if(n==='checked'){el.checked=!!val;continue}
@@ -63,8 +63,17 @@
     const inst=new Component(props);inst.props=props;
     let pending=false,queue=[];
     function render(){const vals=inst.renderVals();const out=[];tplEl.content.childNodes.forEach(c=>build(c,[vals],out,null));
-      const sx=[...root.querySelectorAll('*')].map(e=>e.scrollTop);root.replaceChildren(...out)}
-    window.__dcSched=(i,prev,cb)=>{queue.push([prev,cb]);if(pending)return;pending=true;queueMicrotask(()=>{pending=false;const q=queue;queue=[];render();
+      const sx=[...root.querySelectorAll('*')].map(e=>e.scrollTop);
+      const ae=document.activeElement,fid=ae&&ae.id,ss=ae&&ae.selectionStart,se=ae&&ae.selectionEnd;
+      root.replaceChildren(...out);
+      // 전체 DOM을 갈아끼우므로 포커스·캐럿·스크롤을 복원해야 입력창에 계속 타이핑할 수 있다
+      const all=[...root.querySelectorAll('*')];if(all.length===sx.length)all.forEach((e,i)=>{if(sx[i])e.scrollTop=sx[i]});
+      if(fid){const n=document.getElementById(fid);if(n&&n!==document.activeElement){n.focus({preventScroll:true});try{n.setSelectionRange(ss,se)}catch(e){}}}}
+    // 한글 IME 조합 중에는 DOM을 교체하지 않는다(조합이 끊김). 조합이 끝나면 한 번에 렌더.
+    let composing=false,dirty=false;
+    document.addEventListener('compositionstart',()=>{composing=true});
+    document.addEventListener('compositionend',()=>{composing=false;if(dirty){dirty=false;setTimeout(render,0)}});
+    window.__dcSched=(i,prev,cb)=>{queue.push([prev,cb]);if(pending)return;pending=true;queueMicrotask(()=>{pending=false;const q=queue;queue=[];if(composing)dirty=true;else render();
       if(inst.componentDidUpdate)try{inst.componentDidUpdate(props,q[0][0])}catch(e){console.error(e)}
       q.forEach(([,c])=>c&&c())})};
     render();if(inst.componentDidMount)inst.componentDidMount();
