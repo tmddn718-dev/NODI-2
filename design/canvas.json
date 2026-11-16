@@ -1,0 +1,200 @@
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-11-16T01:06:00Z"
+ },
+ "title": "NODI 서비스 시안 v4 · 아트보드",
+ "launch": {
+  "view": "canvas"
+ },
+ "pages": [],
+ "boards": {
+  "Main.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 11000,
+   "title": "v4 전체 페이지 · 프로토타입 + 디자인 시스템",
+   "is_interactive": true
+  },
+  "01-conds.dc.html": {
+   "x": 1640,
+   "y": 0,
+   "w": 414,
+   "h": 868,
+   "title": "01 AI 조건 확인",
+   "is_interactive": true
+  },
+  "02-edit.dc.html": {
+   "x": 2134,
+   "y": 0,
+   "w": 414,
+   "h": 868,
+   "title": "02 조건 수정",
+   "is_interactive": true
+  },
+  "03-attendees.dc.html": {
+   "x": 2628,
+   "y": 0,
+   "w": 414,
+   "h": 868,
+   "title": "03 참석자 선택 · 추천",
+   "is_interactive": true
+  },
+  "04-required.dc.html": {
+   "x": 3122,
+   "y": 0,
+   "w": 414,
+   "h": 868,
+   "title": "04 일정 필수 설정",
+   "is_interactive": true
+  },
+  "05-progress.dc.html": {
+   "x": 3616,
+   "y": 0,
+   "w": 414,
+   "h": 868,
+   "title": "05 조율 진행 현황",
+   "is_interactive": true
+  },
+  "06-recs.dc.html": {
+   "x": 1640,
+   "y": 1300,
+   "w": 414,
+   "h": 868,
+   "title": "06 추천 시간",
+   "is_interactive": true
+  },
+  "07-review.dc.html": {
+   "x": 2134,
+   "y": 1300,
+   "w": 414,
+   "h": 868,
+   "title": "07 최종 검토",
+   "is_interactive": true
+  },
+  "08-done.dc.html": {
+   "x": 2628,
+   "y": 1300,
+   "w": 414,
+   "h": 868,
+   "title": "08 완료 · 처리 현황",
+   "is_interactive": true
+  },
+  "09-meetings.dc.html": {
+   "x": 1640,
+   "y": 2600,
+   "w": 414,
+   "h": 868,
+   "title": "09 내 회의",
+   "is_interactive": true
+  },
+  "10-detail.dc.html": {
+   "x": 2134,
+   "y": 2600,
+   "w": 414,
+   "h": 868,
+   "title": "10 회의 상세",
+   "is_interactive": true
+  },
+  "11-resched-ask.dc.html": {
+   "x": 2628,
+   "y": 2600,
+   "w": 414,
+   "h": 868,
+   "title": "11 재조율 시작 확인",
+   "is_interactive": true
+  },
+  "12-resched.dc.html": {
+   "x": 3122,
+   "y": 2600,
+   "w": 414,
+   "h": 868,
+   "title": "12 재조율 후보",
+   "is_interactive": true
+  },
+  "13-resched-review.dc.html": {
+   "x": 3616,
+   "y": 2600,
+   "w": 414,
+   "h": 868,
+   "title": "13 변경 내용 검토",
+   "is_interactive": true
+  },
+  "14-inbox.dc.html": {
+   "x": 1640,
+   "y": 3900,
+   "w": 414,
+   "h": 868,
+   "title": "14 받은 요청",
+   "is_interactive": true
+  },
+  "15-request.dc.html": {
+   "x": 2134,
+   "y": 3900,
+   "w": 414,
+   "h": 868,
+   "title": "15 가능 시간 응답",
+   "is_interactive": true
+  },
+  "16-request-stale.dc.html": {
+   "x": 2628,
+   "y": 3900,
+   "w": 414,
+   "h": 868,
+   "title": "16 조건 변경된 요청",
+   "is_interactive": true
+  }
+ },
+ "order": [
+  "Main.dc.html",
+  "01-conds.dc.html",
+  "02-edit.dc.html",
+  "03-attendees.dc.html",
+  "04-required.dc.html",
+  "05-progress.dc.html",
+  "06-recs.dc.html",
+  "07-review.dc.html",
+  "08-done.dc.html",
+  "09-meetings.dc.html",
+  "10-detail.dc.html",
+  "11-resched-ask.dc.html",
+  "12-resched.dc.html",
+  "13-resched-review.dc.html",
+  "14-inbox.dc.html",
+  "15-request.dc.html",
+  "16-request-stale.dc.html"
+ ],
+ "notes": {
+  "rowA": {
+   "x": 1640,
+   "y": -280,
+   "text": "회의 만들기",
+   "kind": "title1",
+   "maxW": 2390
+  },
+  "rowB": {
+   "x": 1640,
+   "y": 1020,
+   "text": "추천 · 확정",
+   "kind": "title1",
+   "maxW": 2390
+  },
+  "rowC": {
+   "x": 1640,
+   "y": 2320,
+   "text": "회의 관리 · 재조율",
+   "kind": "title1",
+   "maxW": 2390
+  },
+  "rowD": {
+   "x": 1640,
+   "y": 3620,
+   "text": "받은 요청",
+   "kind": "title1",
+   "maxW": 2390
+  }
+ },
+ "designSystems": []
+}

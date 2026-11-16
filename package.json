@@ -1,0 +1,15 @@
+{
+  "name": "nodi-design-handoff",
+  "private": true,
+  "version": "5.2.0",
+  "description": "NODI mobile prototype (Claude Design .dc.html) with local render/QA tools",
+  "scripts": {
+    "check": "node tools/check-syntax.js",
+    "shots": "node tools/shoot.js",
+    "page": "node tools/shoot.js --page",
+    "test": "node tools/check-syntax.js && node tools/scenarios.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}
