@@ -183,7 +183,7 @@ body{font-variant-numeric:tabular-nums}
           <!-- ===== 조율 진행 현황 ===== -->
           <sc-if value="{{ isProgress }}" hint-placeholder-val="{{ false }}">
             <div style="position:absolute;top:146px;left:0;right:0;bottom:0;overflow-y:auto;padding:4px 20px 128px;display:flex;flex-direction:column;gap:16px;box-sizing:border-box;">
-              <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+              <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:14px;color:#5B6B81;display:flex;align-items:center;gap:8px;">응답 마감</span><span style="font-size:14px;font-weight:600;color:#2946B8;">11월 18일 (수) 오후 6:00</span></div>
                 <div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:24px;line-height:32px;font-weight:700;"><span style="color:#3654D4;">{{ progNum }}</span> 응답 완료</div><div style="font-size:16px;line-height:24px;color:#18243A;">{{ progSub }}</div></div>
                 <div role="progressbar" aria-valuenow="{{ progPct }}" aria-valuemin="0" aria-valuemax="100" aria-label="응답 제출 진행률" style="height:8px;border-radius:4px;background:#EDF1F7;overflow:hidden;"><div style="height:100%;width:{{ progPct }}%;background:#3654D4;border-radius:4px;"></div></div>
@@ -199,7 +199,7 @@ body{font-variant-numeric:tabular-nums}
               </div>
               <div style="display:flex;flex-direction:column;gap:8px;">
                 <div style="font-size:17px;line-height:24px;font-weight:600;color:#18243A;padding:8px 4px 0;">참석자별 응답 · 캘린더</div>
-                <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;">
+                <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;">
                   <sc-for list="{{ progPeople }}" as="p" hint-placeholder-count="3">
                     <div style="display:flex;gap:12px;padding:16px 16px;border-bottom:1px solid #E2E8F0;">
                       <span style="width:40px;height:40px;border-radius:12px;background:{{ p.avBg }};color:{{ p.avFg }};font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ p.initials }}</span>
@@ -223,74 +223,78 @@ body{font-variant-numeric:tabular-nums}
           <!-- ===== 추천 시간 ===== -->
           <sc-if value="{{ isRecs }}" hint-placeholder-val="{{ false }}">
             <div style="position:absolute;top:146px;left:0;right:0;bottom:0;overflow-y:auto;padding:4px 20px {{ recsPadBottom }}px;display:flex;flex-direction:column;gap:12px;box-sizing:border-box;">
-              <div style="display:flex;align-items:center;gap:8px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:12px 12px 12px 16px;">
-                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;"><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ policyLine }}</span><span style="font-size:16px;font-weight:600;line-height:1.4;">{{ condLine }}</span></div>
-                <button onClick="{{ onOpenEdit }}" style="height:44px;padding:0 16px;border-radius:999px;border:1px solid #E2E8F0;background:#FFFFFF;font-size:14px;font-weight:600;color:#18243A;cursor:pointer;display:flex;align-items:center;gap:8px;flex-shrink:0;">수정</button>
+              <div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:16px;">
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;"><span style="font-size:13px;line-height:20px;color:#5B6B81;">현재 회의 조건</span><span style="font-size:16px;font-weight:600;line-height:24px;color:#18243A;">{{ condLine }}</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ condLine2 }}</span></div>
+                <button onClick="{{ onOpenEdit }}" style="height:44px;padding:0 16px;border-radius:999px;border:1px solid #E2E8F0;background:#FFFFFF;font-size:14px;font-weight:600;color:#18243A;cursor:pointer;flex-shrink:0;">수정</button>
               </div>
-              <sc-if value="{{ showInvalidBanner }}" hint-placeholder-val="{{ false }}"><div role="status" style="display:flex;gap:8px;font-size:14px;line-height:1.5;color:#925500;background:#FFF3DC;border-radius:12px;padding:12px 16px;"><span style="display:flex;padding-top:2px;">{{ I.alert }}</span><span>회의 조건이 바뀌어 이전 추천은 더 이상 유효하지 않아요. 선택한 후보를 지우고 최신 후보를 계산해요.</span></div></sc-if>
+              <sc-if value="{{ showInvalidBanner }}" hint-placeholder-val="{{ false }}"><div role="status" style="display:flex;gap:8px;font-size:14px;line-height:1.5;color:#925500;background:#FFF3DC;border-radius:12px;padding:12px 16px;"><span style="display:flex;padding-top:2px;">{{ I.alert }}</span><span>회의 조건이 변경되어 추천 시간을 다시 찾고 있어요. 이전 추천은 확정할 수 없어요.</span></div></sc-if>
               <sc-if value="{{ recLoading }}" hint-placeholder-val="{{ false }}">
                 <div role="status" style="display:flex;flex-direction:column;gap:12px;">
-                  <div style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600;color:#2946B8;">{{ I.loader }}추천 시간을 계산하고 있어요</div>
-                  <sc-for list="{{ skeletons }}" as="sk" hint-placeholder-count="3"><div style="height:180px;border-radius:16px;background:#FFFFFF;border:1px solid #E2E8F0;padding:20px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px;animation:nodiPulse 1.2s infinite ease-in-out;"><span style="width:120px;height:22px;border-radius:6px;background:#EDF1F7;"></span><span style="width:180px;height:28px;border-radius:999px;background:#EDF1F7;"></span><span style="width:100%;height:56px;border-radius:8px;background:#EDF1F7;"></span></div></sc-for>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600;color:#2946B8;">{{ I.loader }}참석자들의 일정 조건을 비교하고 있어요</div>
+                  <sc-for list="{{ skeletons }}" as="sk" hint-placeholder-count="3"><div style="height:196px;border-radius:20px;background:#FFFFFF;border:1px solid #E2E8F0;padding:20px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px;animation:nodiPulse 1.2s infinite ease-in-out;"><span style="width:110px;height:22px;border-radius:999px;background:#EDF1F7;"></span><span style="width:200px;height:32px;border-radius:8px;background:#EDF1F7;"></span><span style="width:160px;height:18px;border-radius:6px;background:#EDF1F7;"></span><span style="width:100%;height:56px;border-radius:12px;background:#EDF1F7;"></span></div></sc-for>
                 </div>
               </sc-if>
               <sc-if value="{{ recError }}" hint-placeholder-val="{{ false }}">
                 <div role="alert" style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:28px 20px;background:#FFFFFF;border:1px solid #F3B9BE;border-radius:16px;">
                   <span style="width:48px;height:48px;border-radius:24px;background:#FDECEE;color:#C53D45;display:flex;align-items:center;justify-content:center;">{{ I.wifiOff }}</span>
-                  <div style="font-size:18px;font-weight:600;">추천을 다시 계산하지 못했어요</div>
-                  <div style="font-size:14px;color:#5B6B81;line-height:1.5;">네트워크 연결을 확인하고 다시 시도해 주세요. 이전 추천으로는 확정할 수 없어요.</div>
+                  <div style="font-size:18px;font-weight:600;">추천 시간을 불러오지 못했어요</div>
+                  <div style="font-size:14px;color:#5B6B81;line-height:1.5;">네트워크 연결을 확인하고 다시 시도해 주세요. 입력한 조건은 그대로 유지돼요.</div>
                   <button onClick="{{ onRetryRecs }}" style="height:52px;padding:0 20px;border-radius:14px;border:none;background:#3654D4;color:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;">다시 시도</button>
                 </div>
               </sc-if>
               <sc-if value="{{ hasRecs }}" hint-placeholder-val="{{ true }}">
-                <div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:24px;line-height:32px;font-weight:700;text-wrap:pretty;">추천 후보 <span style="color:#3654D4;">{{ recN }}개</span>를 찾았어요</div><div style="font-size:14px;color:#5B6B81;">{{ recSubtitle }}</div></div>
-                <div style="display:flex;gap:8px;align-items:center;">
-                  <div role="group" aria-label="보기 방식" style="flex:1;display:flex;background:#E3E8F0;border-radius:12px;padding:4px;"><sc-for list="{{ viewOpts }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.onClick }}" aria-pressed="{{ o.on }}" style="flex:1;height:44px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }};box-shadow:{{ o.shadow }};display:flex;align-items:center;justify-content:center;gap:8px;">{{ o.label }}</button></sc-for></div>
-                  <button onClick="{{ onToggleCriteria }}" aria-expanded="{{ showCriteria }}" aria-label="추천 기준 보기" style="width:48px;height:48px;border-radius:14px;border:1px solid #E2E8F0;background:#FFFFFF;color:#18243A;cursor:pointer;display:flex;align-items:center;justify-content:center;">{{ I.info }}</button>
-                </div>
-                <sc-if value="{{ showCriteria }}">
-                  <div style="font-size:14px;line-height:1.6;color:#18243A;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:16px 16px;display:flex;flex-direction:column;gap:8px;">
-                    <span style="font-weight:600;color:#18243A;">1단계 · 필수 조건</span><span>{{ policyRule }}</span>
-                    <span style="font-weight:600;color:#18243A;padding-top:4px;">2단계 · 참여 기회 최대화</span><span>참석 가능(응답·충돌 없음) 인원 → 일반 참석자 참여 → 선호 시간대·날짜 → 본인 응답 비율 순으로 비교해요.</span>
-                    <span style="color:#5B6B81;">응답 대기·확인 불가·조정하면 가능은 가능으로 계산하지 않아요.</span>
-                  </div>
-                </sc-if>
+                <div style="display:flex;flex-direction:column;gap:6px;padding:4px 0 0;"><div style="font-size:24px;line-height:32px;font-weight:700;letter-spacing:-0.01em;text-wrap:pretty;">{{ headline }}</div><div style="font-size:14px;line-height:21px;color:#5B6B81;text-wrap:pretty;">{{ headSub }}</div><div style="font-size:13px;line-height:20px;color:#5B6B81;">{{ headMeta }}</div></div>
+                <div role="group" aria-label="보기 방식" style="display:flex;background:#E3E8F0;border-radius:12px;padding:4px;"><sc-for list="{{ viewOpts }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.onClick }}" aria-pressed="{{ o.on }}" style="flex:1;height:44px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }};box-shadow:{{ o.shadow }};transition:background .18s;">{{ o.label }}</button></sc-for></div>
               </sc-if>
               <sc-if value="{{ isCardView }}" hint-placeholder-val="{{ true }}">
                 <sc-for list="{{ recs }}" as="r" hint-placeholder-count="3">
-                  <div style="flex-shrink:0;border:{{ r.border }};background:{{ r.cardBg }};border-radius:16px;overflow:hidden;">
-                  <button onClick="{{ r.onPick }}" aria-pressed="{{ r.picked }}" style="text-align:left;width:100%;display:flex;flex-direction:column;gap:8px;padding:20px 20px 8px;background:transparent;border:none;cursor:pointer;box-sizing:border-box;color:#18243A;">
-                    <div style="display:flex;align-items:center;gap:8px;width:100%;"><sc-if value="{{ r.isTop }}"><span style="height:24px;padding:0 10px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:#E9EEFF;color:#2946B8;">NODI 추천</span></sc-if><span style="height:24px;padding:0 10px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:{{ r.stBg }};color:{{ r.stFg }};">{{ r.stLabel }}</span><div style="flex:1;"></div><span style="width:24px;height:24px;border-radius:12px;box-sizing:border-box;border:{{ r.radioBorder }};display:flex;align-items:center;justify-content:center;"><sc-if value="{{ r.picked }}"><span style="width:12px;height:12px;border-radius:6px;background:#3654D4;"></span></sc-if></span></div>
-                    <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:15px;line-height:22px;color:#5B6B81;">{{ r.dateLong }}</span><span style="font-size:22px;line-height:30px;font-weight:600;">{{ r.time }}</span></div>
-                    <span style="font-size:15px;line-height:22px;color:#18243A;">{{ r.summary }}</span>
+                  <div style="flex-shrink:0;border:{{ r.border }};background:{{ r.cardBg }};border-radius:20px;overflow:hidden;transition:border-color .18s,background .18s;">
+                  <button onClick="{{ r.onPick }}" aria-pressed="{{ r.picked }}" style="text-align:left;width:100%;display:flex;flex-direction:column;gap:14px;padding:20px 20px 12px;background:transparent;border:none;cursor:pointer;box-sizing:border-box;color:#18243A;">
+                    <div style="display:flex;align-items:center;gap:8px;width:100%;"><sc-if value="{{ r.isTop }}"><span style="height:26px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:600;display:flex;align-items:center;background:#E9EEFF;color:#2946B8;">{{ r.topLabel }}</span></sc-if><sc-if value="{{ r.notTop }}"><span style="height:26px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:#EDF1F7;color:#5B6B81;">{{ r.rankPlain }}</span></sc-if><div style="flex:1;"></div><span style="width:24px;height:24px;border-radius:12px;box-sizing:border-box;border:{{ r.radioBorder }};background:{{ r.radioFill }};display:flex;align-items:center;justify-content:center;">{{ r.radioMark }}</span></div>
+                    <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ r.dateMeta }}</span><span style="font-size:28px;line-height:36px;font-weight:700;letter-spacing:-0.01em;font-variant-numeric:tabular-nums;">{{ r.timeMain }}</span></div>
+                    <div style="display:flex;align-items:center;gap:6px;font-size:14px;line-height:21px;font-weight:600;color:{{ r.reqShortColor }};"><span style="display:flex;">{{ r.reqShortIcon }}</span>{{ r.reqShort }}</div>
+                    <div style="display:flex;flex-direction:column;gap:8px;border-top:1px solid #E2E8F0;padding-top:12px;">
+                      <span style="font-size:13px;line-height:20px;color:#5B6B81;">참석 가능성 · 전체 {{ nPeople }}명</span>
+                      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;"><sc-for list="{{ r.tiles }}" as="t" hint-placeholder-count="3"><div style="background:{{ t.bg }};border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;min-width:0;"><span style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:22px;line-height:28px;font-weight:600;color:{{ t.color }};font-variant-numeric:tabular-nums;">{{ t.n }}</span><span style="display:flex;">{{ t.icon }}</span></span><span style="font-size:13px;line-height:18px;color:#5B6B81;min-height:36px;">{{ t.l }}</span></div></sc-for></div>
+                      <sc-if value="{{ r.hasNoNote }}"><span style="font-size:13px;line-height:20px;color:#B52E3A;font-weight:600;">{{ r.noNote }}</span></sc-if>
+                    </div>
                     <span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ r.reasonShort }}</span>
                   </button>
-                  <div style="padding:0 20px 12px;display:flex;flex-direction:column;gap:12px;"><button onClick="{{ r.onToggleReason }}" aria-expanded="{{ r.reasonOpen }}" style="align-self:flex-start;height:44px;padding:0;border:none;background:transparent;color:#2946B8;font-size:14px;font-weight:600;cursor:pointer;">{{ r.reasonLabel }}</button><sc-if value="{{ r.reasonOpen }}"><div style="display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:21px;"><span style="display:flex;color:{{ r.reqColor }};padding-top:1px;">{{ r.reqIcon }}</span><span style="font-weight:600;color:{{ r.reqColor }};">{{ r.reqLine }}</span></div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 24px;"><sc-for list="{{ r.tiles }}" as="t" hint-placeholder-count="4"><div style="border-top:1px solid #E2E8F0;padding:8px 0 0;display:flex;flex-direction:column;gap:2px;"><span style="font-size:13px;line-height:20px;color:#5B6B81;">{{ t.l }}</span><span style="font-size:16px;font-weight:600;color:{{ t.color }};">{{ t.n }}</span></div></sc-for></div><sc-for list="{{ r.issues }}" as="is" hint-placeholder-count="1"><div style="display:flex;gap:8px;font-size:14px;line-height:1.5;"><span style="font-weight:600;color:{{ is.color }};flex-shrink:0;">{{ is.label }}</span><span style="color:#18243A;">{{ is.text }}</span></div></sc-for><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ r.reason }}</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ r.prefLine }}</span></sc-if></div>
+                  <button onClick="{{ r.onOpenSheet }}" aria-haspopup="dialog" style="width:100%;height:48px;padding:0 20px;border:none;border-top:1px solid #EDF1F7;background:transparent;color:#2946B8;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">추천 이유 확인<span style="display:flex;">{{ I.next }}</span></button>
                   </div>
                 </sc-for>
               </sc-if>
-              <sc-if value="{{ isTableView }}" hint-placeholder-val="{{ false }}">
-                <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;overflow:hidden;">
-                  <div style="display:grid;grid-template-columns:{{ tableCols }};border-bottom:1px solid #E2E8F0;">
-                    <div style="padding:12px 12px;font-size:14px;line-height:21px;color:#5B6B81;">기준</div>
-                    <sc-for list="{{ tableHead }}" as="h" hint-placeholder-count="3"><button onClick="{{ h.onPick }}" aria-pressed="{{ h.picked }}" style="min-height:64px;padding:12px 8px;border:none;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:2px;background:{{ h.bg }};color:#18243A;"><span style="font-size:13px;font-weight:600;color:{{ h.rankFg }};">{{ h.rank }}</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ h.day }}</span><span style="font-size:16px;font-weight:600;">{{ h.time }}</span></button></sc-for>
-                  </div>
-                  <sc-for list="{{ tableRows }}" as="row" hint-placeholder-count="7">
-                    <div style="display:grid;grid-template-columns:{{ tableCols }};border-bottom:1px solid #E2E8F0;">
-                      <div style="padding:12px 12px;font-size:13px;color:{{ row.labelColor }};font-weight:{{ row.weight }};line-height:1.35;">{{ row.label }}</div>
-                      <sc-for list="{{ row.cells }}" as="c" hint-placeholder-count="3"><div style="padding:12px 8px;font-size:14px;font-weight:600;color:{{ c.color }};background:{{ c.bg }};">{{ c.text }}</div></sc-for>
+              <sc-if value="{{ isCmpView }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:18px;line-height:26px;font-weight:600;">후보를 비교해 보세요</div><div style="font-size:14px;line-height:21px;color:#5B6B81;">{{ cmpCommon }}</div></div>
+                <sc-for list="{{ cmpCards }}" as="cc" hint-placeholder-count="3">
+                  <div style="flex-shrink:0;border:{{ cc.border }};background:{{ cc.cardBg }};border-radius:20px;padding:16px 20px 20px;display:flex;flex-direction:column;gap:12px;transition:border-color .18s,background .18s;">
+                    <div style="display:flex;align-items:center;gap:8px;"><span style="height:26px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:{{ cc.rankW }};display:flex;align-items:center;background:{{ cc.rankBg }};color:{{ cc.rankFg }};">{{ cc.rank }}</span></div>
+                    <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ cc.dateMeta }}</span><span style="font-size:26px;line-height:34px;font-weight:700;letter-spacing:-0.01em;font-variant-numeric:tabular-nums;">{{ cc.time }}</span></div>
+                    <div style="display:flex;flex-direction:column;">
+                      <sc-for list="{{ cc.rows }}" as="rw" hint-placeholder-count="5"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:36px;border-top:1px solid #EDF1F7;font-size:14px;line-height:21px;"><span style="color:{{ rw.lc }};">{{ rw.l }}</span><span style="font-weight:{{ rw.vw }};color:{{ rw.vc }};font-variant-numeric:tabular-nums;">{{ rw.v }}</span></div></sc-for>
                     </div>
-                  </sc-for>
-                  <div style="padding:12px;font-size:14px;line-height:21px;color:#5B6B81;line-height:1.5;">후보 간 차이가 있는 기준만 진하게 표시해요. 열 제목을 눌러 후보를 선택하세요.</div>
+                    <button onClick="{{ cc.onPick }}" aria-pressed="{{ cc.picked }}" style="height:48px;border-radius:14px;border:{{ cc.btnBorder }};background:{{ cc.btnBg }};color:{{ cc.btnFg }};font-size:16px;font-weight:600;cursor:pointer;transition:background .18s;">{{ cc.btnLabel }}</button>
+                  </div>
+                </sc-for>
+                <div style="font-size:13px;line-height:20px;color:#5B6B81;">후보마다 다른 항목만 진하게 표시해요.</div>
+              </sc-if>
+              <sc-if value="{{ hasRecs }}" hint-placeholder-val="{{ true }}">
+                <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;overflow:hidden;flex-shrink:0;">
+                  <button onClick="{{ onToggleCrit }}" aria-expanded="{{ critOpen }}" style="width:100%;min-height:56px;padding:0 20px;border:none;background:transparent;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;text-align:left;color:#18243A;"><span style="display:flex;flex-direction:column;gap:2px;padding:10px 0;"><span style="font-size:16px;font-weight:600;line-height:24px;">NODI는 이렇게 추천해요</span><span style="font-size:13px;line-height:20px;color:#5B6B81;">필수 참석자의 일정 조건을 먼저 확인해요</span></span><span style="font-size:14px;font-weight:600;color:#2946B8;flex-shrink:0;">{{ critLabel }}</span></button>
+                  <sc-if value="{{ critOpen }}"><div style="padding:4px 20px 20px;display:flex;flex-direction:column;gap:12px;border-top:1px solid #EDF1F7;font-size:14px;line-height:21px;color:#18243A;">
+                    <div style="display:flex;flex-direction:column;gap:2px;padding-top:12px;"><span style="font-weight:600;">1단계 · 필수 조건 확인</span><span style="color:#5B6B81;">{{ policyRule }}</span></div>
+                    <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-weight:600;">2단계 · 참석 가능성 비교</span><span style="color:#5B6B81;">가능 응답, 캘린더 충돌 여부, 확인이 필요한 인원을 구분해서 비교해요. 응답 대기·조정하면 가능은 가능으로 계산하지 않아요.</span></div>
+                    <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-weight:600;">3단계 · 선호 조건 반영</span><span style="color:#5B6B81;">선호 시간대와 날짜를 비교해요.</span></div>
+                  </div></sc-if>
                 </div>
               </sc-if>
-              <sc-if value="{{ showExcluded }}" hint-placeholder-val="{{ false }}"><div style="font-size:14px;color:#18243A;line-height:1.5;background:#EDF1F7;border-radius:12px;padding:12px 16px;">{{ excludedText }}</div></sc-if>
+              <sc-if value="{{ showExcluded }}" hint-placeholder-val="{{ false }}"><div style="flex-shrink:0;font-size:14px;color:#18243A;line-height:1.5;background:#EDF1F7;border-radius:12px;padding:12px 16px;">{{ excludedText }}</div></sc-if>
               <sc-if value="{{ noRecs }}" hint-placeholder-val="{{ false }}">
                 <div style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:32px 20px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;">
                   <img src="assets/nodi-3d-calendar-empty.svg" alt="" width="96" height="96" style="display:block;">
-                  <div style="font-size:18px;font-weight:600;">조건을 만족하는 시간이 없어요</div>
+                  <div style="font-size:18px;font-weight:600;">조건에 맞는 시간을 찾지 못했어요</div>
                   <div style="font-size:14px;color:#5B6B81;line-height:1.5;">{{ noRecsText }}</div>
-                  <div style="display:flex;gap:8px;width:100%;"><button onClick="{{ onOpenEdit }}" style="flex:1;height:52px;border-radius:14px;border:none;background:#3654D4;color:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;">기간 넓히기</button><button onClick="{{ onOpenRoles }}" style="flex:1;height:48px;border-radius:14px;border:1px solid #E2E8F0;background:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;color:#18243A;">역할 조정</button></div>
+                  <div style="display:flex;gap:8px;width:100%;"><button onClick="{{ onOpenEdit }}" style="flex:1;height:52px;border-radius:14px;border:none;background:#3654D4;color:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;">회의 조건 수정</button><button onClick="{{ onOpenRoles }}" style="flex:1;height:48px;border-radius:14px;border:1px solid #E2E8F0;background:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;color:#18243A;">역할 조정</button></div>
                 </div>
               </sc-if>
             </div>
@@ -307,11 +311,25 @@ body{font-variant-numeric:tabular-nums}
             </sc-if>
           </sc-if>
 
+          <sc-if value="{{ showReasonSheet }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;z-index:20;background:rgb(24 36 58 / 0.56);display:flex;align-items:flex-end;" onClick="{{ onCloseReasonSheet }}">
+              <div role="dialog" aria-modal="true" aria-label="{{ rsTitle }}" style="width:100%;max-height:82%;background:#FFFFFF;border-radius:24px 24px 0 0;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden;animation:nodiRise .24s cubic-bezier(.22,1,.36,1) both;">
+                <div style="display:flex;justify-content:center;padding:8px 0 0;"><span style="width:40px;height:4px;border-radius:2px;background:#E2E8F0;"></span></div>
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:12px 20px 8px;"><div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:20px;line-height:28px;font-weight:700;">{{ rsTitle }}</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ rsWhen }}</span></div><button onClick="{{ onCloseReasonSheet }}" aria-label="닫기" style="width:44px;height:44px;border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#18243A;flex-shrink:0;">{{ I.x }}</button></div>
+                <div style="margin:0 20px 8px;background:#F5F7FB;border-radius:12px;padding:12px 16px;font-size:14px;line-height:21px;font-weight:600;color:#18243A;">{{ rsSummary }}</div>
+                <div style="flex:1 1 auto;min-height:120px;overflow-y:auto;padding:0 20px 8px;display:flex;flex-direction:column;">
+                  <sc-for list="{{ rsSheetRows }}" as="pr" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:2px;padding:14px 0;border-top:1px solid #EDF1F7;"><span style="display:flex;align-items:center;gap:8px;font-size:16px;line-height:24px;font-weight:600;">{{ pr.name }}<sc-if value="{{ pr.need }}"><span style="height:22px;padding:0 8px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:#E3E8F0;color:#18243A;">일정 필수</span></sc-if></span><span style="font-size:15px;line-height:22px;font-weight:600;color:{{ pr.color }};">{{ pr.state }}</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ pr.sub }}</span></div></sc-for>
+                </div>
+                <div style="padding:12px 20px 34px;border-top:1px solid #EDF1F7;font-size:13px;line-height:20px;color:#5B6B81;">캘린더상 충돌이 없다는 것은 참석 확정을 의미하지 않아요. 일정 필수는 시간 추천 조건이며 참석 수락과 달라요.</div>
+              </div>
+            </div>
+          </sc-if>
+
           <!-- ===== 최종 검토 ===== -->
           <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
             <div style="position:absolute;top:146px;left:0;right:0;bottom:0;overflow-y:auto;padding:4px 20px 248px;display:flex;flex-direction:column;gap:12px;box-sizing:border-box;">
               <div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:24px;font-weight:700;line-height:32px;">이 일정으로 회의를 확정할까요?</div><div style="font-size:14px;line-height:21px;color:#5B6B81;">저장 후 회의 상세에서 내용을 확인할 수 있어요.</div></div>
-              <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+              <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px;">
                 <div style="display:flex;flex-direction:column;gap:2px;"><div style="font-size:14px;color:#5B6B81;">{{ rvType }}</div><div style="font-size:22px;font-weight:600;line-height:30px;">{{ rvDate }}</div><div style="font-size:18px;font-weight:600;">{{ rvTime }}</div></div>
                 <div style="height:1px;background:#EDF1F7;"></div>
                 <div style="display:flex;flex-direction:column;gap:8px;"><div style="font-size:14px;color:#5B6B81;">참석자 {{ rvCount }}</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ rvPeople }}" as="p" hint-placeholder-count="3"><span style="height:32px;padding:0 12px;border-radius:16px;display:flex;align-items:center;font-size:14px;font-weight:600;background:{{ p.bg }};color:{{ p.fg }};">{{ p.label }}</span></sc-for></div></div>
@@ -319,14 +337,14 @@ body{font-variant-numeric:tabular-nums}
               </div>
               <sc-if value="{{ showImpact }}"><div style="display:flex;flex-direction:column;gap:8px;background:#FFF3DC;border-radius:12px;padding:12px 16px;"><span style="font-size:14px;line-height:1.5;color:#925500;">{{ impactText }}</span><button onClick="{{ onPickAltBack }}" style="align-self:flex-start;height:44px;padding:0 16px;border-radius:999px;border:1px solid #E8C98A;background:#FFFFFF;color:#925500;font-size:14px;font-weight:600;cursor:pointer;">그 후보로 변경</button></div></sc-if>
               <sc-if value="{{ rvHasIssues }}" hint-placeholder-val="{{ true }}">
-                <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:16px 20px;display:flex;flex-direction:column;gap:8px;">
+                <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:16px 20px;display:flex;flex-direction:column;gap:8px;">
                   <span style="font-size:16px;font-weight:600;">참석이 어렵거나 미확인인 사람</span>
                   <sc-for list="{{ rvIssues }}" as="u" hint-placeholder-count="1"><div style="display:flex;gap:8px;font-size:14px;line-height:1.5;"><span style="font-weight:600;color:{{ u.color }};flex-shrink:0;">{{ u.label }}</span><span>{{ u.text }}</span></div></sc-for>
                 </div>
               </sc-if>
               <div style="display:flex;flex-direction:column;gap:8px;">
                 <div style="font-size:17px;line-height:24px;font-weight:600;color:#18243A;padding:8px 4px 0;">확정 후 처리</div>
-                <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;">
+                <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;">
                   <div style="display:flex;align-items:center;gap:12px;padding:16px 20px;min-height:44px;"><div style="flex:1;display:flex;flex-direction:column;gap:2px;"><span style="font-size:16px;line-height:24px;font-weight:600;">NODI에 회의 저장</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">확정 시 자동으로 저장돼요</span></div><span style="flex-shrink:0;height:24px;padding:0 10px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:#E3E8F0;color:#18243A;">자동</span></div>
                   <div style="height:1px;background:#EDF1F7;margin:0 20px;"></div>
                   <button onClick="{{ onToggleInvite }}" role="switch" aria-checked="{{ inviteOn }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:16px 20px;border:none;background:transparent;text-align:left;cursor:pointer;color:#18243A;"><div style="flex:1;display:flex;flex-direction:column;gap:2px;"><span style="font-size:16px;line-height:24px;font-weight:600;">데모 알림 처리</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">실제 참석자에게 발송되지 않아요</span></div><span style="width:51px;height:31px;border-radius:16px;padding:2px;box-sizing:border-box;display:flex;background:{{ inviteTrack }};justify-content:{{ inviteJustify }};"><span style="width:27px;height:27px;border-radius:12px;background:#FFFFFF;box-shadow:0 1px 3px rgb(0 0 0 / 0.15);"></span></span></button>
@@ -378,7 +396,7 @@ body{font-variant-numeric:tabular-nums}
               <img src="assets/nodi-3d-calendar.svg" alt="" width="132" height="132" style="flex-shrink:0;display:block;margin-top:8px;animation:nodiPop .5s cubic-bezier(.22,1,.36,1) both;">
               <div style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;animation:nodiRise .5s .08s cubic-bezier(.22,1,.36,1) both;"><h1 style="margin:0;font-size:26px;line-height:36px;font-weight:700;letter-spacing:-0.01em;">NODI에 회의가<br>저장됐어요</h1><div style="font-size:15px;line-height:22px;color:#18243A;">{{ dnTitle }}</div><div style="font-size:16px;line-height:24px;font-weight:600;color:#18243A;font-variant-numeric:tabular-nums;">{{ dnWhenFull }}</div><div style="font-size:14px;line-height:21px;color:#5B6B81;">캘린더 연결과 알림 처리는 아래에서 확인할 수 있어요.</div></div>
               <div style="width:100%;display:flex;flex-direction:column;gap:8px;padding-top:12px;"><div style="font-size:17px;line-height:24px;font-weight:600;color:#18243A;padding:8px 4px 0;">후속 처리 현황</div>
-                <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;">
+                <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;">
                   <sc-for list="{{ dnFollow }}" as="f" hint-placeholder-count="3"><div style="display:flex;align-items:flex-start;gap:12px;padding:16px 20px;border-top:{{ f.sep }};"><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;"><span style="font-size:16px;line-height:24px;font-weight:600;">{{ f.label }}</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ f.sub }}</span></div><span style="flex-shrink:0;margin-top:2px;height:24px;padding:0 10px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;white-space:nowrap;background:{{ f.bg }};color:{{ f.fg }};">{{ f.badge }}</span></div></sc-for>
                 </div>
               </div>
@@ -492,14 +510,14 @@ body{font-variant-numeric:tabular-nums}
           <sc-if value="{{ isResched }}" hint-placeholder-val="{{ false }}">
             <div style="position:absolute;top:106px;left:0;right:0;bottom:0;overflow-y:auto;padding:4px 20px 208px;display:flex;flex-direction:column;gap:12px;box-sizing:border-box;">
               <span style="align-self:flex-start;height:28px;padding:0 12px;border-radius:999px;font-size:14px;font-weight:600;display:flex;align-items:center;background:#E9EEFF;color:#2946B8;">{{ rsStage }}</span>
-              <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:16px 20px;display:flex;flex-direction:column;">
+              <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:16px 20px;display:flex;flex-direction:column;">
                 <div style="display:flex;gap:12px;"><div style="display:flex;flex-direction:column;align-items:center;"><span style="width:14px;height:14px;border-radius:7px;background:#137B57;margin-top:4px;"></span><span style="flex:1;width:2px;background:#E2E8F0;margin:4px 0;"></span></div><div style="flex:1;display:flex;flex-direction:column;gap:2px;padding-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:14px;color:#5B6B81;">기존 확정 일정</span><span style="height:26px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:#E8F7EF;color:#137B57;">유지 중</span></div><span style="font-size:16px;line-height:24px;font-weight:600;">{{ rsOld }}</span></div></div>
                 <div style="display:flex;gap:12px;"><div style="display:flex;flex-direction:column;align-items:center;"><span style="width:14px;height:14px;border-radius:7px;border:2px solid #3654D4;box-sizing:border-box;margin-top:4px;"></span></div><div style="flex:1;display:flex;flex-direction:column;gap:2px;"><span style="font-size:14px;color:#5B6B81;">새 일정 (아직 확정 전)</span><span style="font-size:18px;font-weight:600;color:{{ rsNewColor }};">{{ rsNew }}</span></div></div>
               </div>
               <sc-if value="{{ rsHasCands }}" hint-placeholder-val="{{ true }}"><div style="font-size:17px;line-height:24px;font-weight:600;color:#18243A;padding:8px 4px 0;">새 후보 · 이 시간에 대한 응답 기준</div>
               <div style="font-size:14px;line-height:21px;color:#925500;background:#FFF3DC;border-radius:12px;padding:12px;">기존 응답은 새 후보에 그대로 적용되지 않을 수 있어요.</div></sc-if>
               <sc-if value="{{ rsEmpty }}" hint-placeholder-val="{{ false }}">
-                <div role="status" style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:32px 20px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;">
+                <div role="status" style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:32px 20px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;">
                   <img src="assets/nodi-3d-calendar-empty.svg" alt="" width="96" height="96" style="display:block;">
                   <div style="font-size:18px;line-height:26px;font-weight:600;">{{ rsEmptyTitle }}</div>
                   <div style="font-size:14px;color:#5B6B81;line-height:1.5;">{{ rsEmptyText }}</div>
@@ -526,7 +544,7 @@ body{font-variant-numeric:tabular-nums}
 
               </sc-for></sc-if></div></sc-if>
               <sc-if value="{{ rsCanReq }}"><button onClick="{{ onRsRequest }}" aria-disabled="{{ rsReqDisabled }}" style="height:52px;border-radius:14px;border:1px solid #C9D4FF;background:{{ rsReqBg }};color:{{ rsReqFg }};font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">{{ rsReqLabel }}</button></sc-if>
-              <div style="display:flex;gap:8px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:16px 16px;font-size:14px;line-height:1.55;color:#18243A;"><span style="display:flex;padding-top:2px;color:#5B6B81;">{{ I.history }}</span><span>{{ rsArchive }}</span></div>
+              <div style="display:flex;gap:8px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:16px 16px;font-size:14px;line-height:1.55;color:#18243A;"><span style="display:flex;padding-top:2px;color:#5B6B81;">{{ I.history }}</span><span>{{ rsArchive }}</span></div>
             </div>
             <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 20px 34px;display:flex;flex-direction:column;gap:8px;background:#F5F7FB;border-top:1px solid #E2E8F0;z-index:4;">
               <button onClick="{{ onRsReview }}" aria-disabled="{{ rsCtaDisabled }}" style="width:100%;height:56px;border-radius:14px;border:none;background:{{ rsCtaBg }};color:{{ rsCtaFg }};font-size:16px;font-weight:600;line-height:24px;cursor:pointer;">{{ rsCtaLabel }}</button>
@@ -538,12 +556,12 @@ body{font-variant-numeric:tabular-nums}
           <sc-if value="{{ isRsReview }}" hint-placeholder-val="{{ false }}">
             <div style="position:absolute;top:106px;left:0;right:0;bottom:0;overflow-y:auto;padding:4px 20px 200px;display:flex;flex-direction:column;gap:12px;box-sizing:border-box;">
               <div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:24px;font-weight:700;line-height:32px;">기존 회의와 비교해 주세요</div><div style="font-size:14px;color:#5B6B81;">아직 변경되지 않았어요. 변경 직전에 최신 일정과 응답을 다시 확인해요.</div></div>
-              <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+              <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px;">
                 <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:14px;line-height:21px;color:#5B6B81;">변경 전 · 기존 회의 (확정 전까지 유지)</span><span style="font-size:18px;line-height:26px;font-weight:600;color:#18243A;">{{ rsOld }}</span></div>
                 <span style="display:flex;color:#2946B8;">{{ I.down }}</span>
                 <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:14px;line-height:21px;font-weight:600;color:#2946B8;">변경 후 · 새 일정</span><span style="font-size:20px;line-height:28px;font-weight:600;">{{ rsNew }}</span></div>
               </div>
-              <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;">
+              <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;">
                 <sc-for list="{{ rsRows }}" as="cr" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;gap:4px;padding:16px 20px;border-bottom:1px solid #E2E8F0;"><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ cr.l }}</span><span style="font-size:16px;line-height:24px;font-weight:600;color:{{ cr.color }};">{{ cr.v }}</span><sc-if value="{{ cr.hasSub }}"><span style="font-size:14px;line-height:21px;color:#18243A;">{{ cr.sub }}</span></sc-if><sc-if value="{{ cr.hasToggle }}"><button onClick="{{ cr.onToggle }}" style="align-self:flex-start;height:44px;padding:0;border:none;background:transparent;color:#2946B8;font-size:14px;font-weight:600;cursor:pointer;">{{ cr.toggleLabel }}</button></sc-if></div></sc-for>
               </div>
               <sc-if value="{{ rsErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="border:1px solid #F3B9BE;background:#FDECEE;border-radius:12px;padding:16px 16px;display:flex;flex-direction:column;gap:4px;"><span style="font-size:16px;font-weight:600;color:#B52E3A;">변경 실패 — 기존 일정 유지</span><span style="font-size:14px;color:#B52E3A;line-height:1.5;">새 일정을 확정하지 못했어요. {{ rsOld }} 회의와 초대, 캘린더 상태는 바뀌지 않았어요.</span></div></sc-if>
@@ -1413,13 +1431,13 @@ class Component extends DCLogic {
       if(r.maybe.length)issues.push({label:'조정하면 가능',color:'#925500',text:r.maybe.map(id=>label(P[id])).join(', ')});
       if(r.unk.length)issues.push({label:'미확인',color:'#18243A',text:r.unk.map(id=>`${label(P[id])}(${unkWhy(id,r.ctx)})`).join(', ')});
       const picked=!!s.pick&&s.pick.d===r.d&&s.pick.h===r.h,okReq=s.policy==='all'?r.avail.length===n:(!r.reqIds.length||r.reqOk);
-      return{d:r.d,h:r.h,rankLabel:rank,rankBg:b(rk)[0],rankFg:b(rk)[1],isTop:i===0&&!isAltExtra,dateLong:DAYS[r.d].label.replace(/\((.)\)/,'$1요일'),summary:[`가능 응답 ${r.yes.length}명`,`캘린더 일정 없음 ${r.cal.length}명`,r.unk.length+r.maybe.length?`응답 대기 ${r.unk.length+r.maybe.length}명`:'',r.no.length?`참석 어려움 ${r.no.length}명`:''].filter(Boolean).join(' · '),reasonShort:parts[0]||'현재 확인된 정보 기준 후보예요.',stLabel:(r.reqIds.length||s.policy==='all')?(okReq?'필수 일정 조건 충족':'필수 일정 조건 확인 필요'):stL,stBg:b((r.reqIds.length||s.policy==='all')?(okReq?'success':'warning'):stK)[0],stFg:b((r.reqIds.length||s.policy==='all')?(okReq?'success':'warning'):stK)[1],stIcon:ic(r.confirmable?'circleCheck':'circleHelp',16),
+      return{d:r.d,h:r.h,rankLabel:rank,rankBg:b(rk)[0],rankFg:b(rk)[1],isTop:i===0&&!isAltExtra,notTop:!(i===0&&!isAltExtra),radioFill:picked?'#3654D4':'transparent',radioMark:picked?ic('check',14,'#FFFFFF',3):'',topLabel:isTie?'동률 1순위':isAltExtra?'모두 가능한 후보':'NODI 추천 1순위',rankPlain:`후보 ${i+1}`,dateLong:DAYS[r.d].label.replace(/\((.)\)/,'$1요일'),dateMeta:`${DAYS[r.d].label.replace(/\((.)\)/,'$1요일')} · ${c.duration||60}분`,timeMain:fmtRange(r.h,c.duration||60),sheetRows:s.selected.map(id=>{const k=r.st[id],need=!!s.required[id]&&s.policy!=='all';const T={yes:['가능 응답','직접 응답으로 확인했어요','#137B57'],cal:['캘린더상 충돌 없음','캘린더 조회 결과예요 · 실제 참석 수락 전','#2946B8'],maybe:['조정하면 가능','조정되기 전까지 가능으로 계산하지 않아요','#925500'],unk:['확인 필요',unkWhy(id,r.ctx),'#925500'],no:['참석 어려움','이 시간에는 참석하기 어려워요','#B52E3A']}[k];return{name:label(P[id]),need,state:T[0],sub:T[1],color:T[2]}}),summary:[`가능 응답 ${r.yes.length}명`,`캘린더 일정 없음 ${r.cal.length}명`,r.unk.length+r.maybe.length?`응답 대기 ${r.unk.length+r.maybe.length}명`:'',r.no.length?`참석 어려움 ${r.no.length}명`:''].filter(Boolean).join(' · '),reasonShort:parts[0]||'현재 확인된 정보 기준 후보예요.',stLabel:(r.reqIds.length||s.policy==='all')?(okReq?'필수 일정 조건 충족':'필수 일정 조건 확인 필요'):stL,stBg:b((r.reqIds.length||s.policy==='all')?(okReq?'success':'warning'):stK)[0],stFg:b((r.reqIds.length||s.policy==='all')?(okReq?'success':'warning'):stK)[1],stIcon:ic(r.confirmable?'circleCheck':'circleHelp',16),
         date:`${DAYS[r.d].label} · ${c.duration||60}분`,time:fmtRange(r.h,c.duration||60),score:r.score,
         reqLine,reqColor:okReq?'#137B57':'#925500',reqIcon:ic(okReq?'shieldCheck':'triangleAlert',20),
-        tiles:[{l:'참석 가능 응답',n:`${r.yes.length}명`,color:'#18243A',bg:'#F5F7FB'},{l:'캘린더 일정 없음',n:`${r.cal.length}명`,color:'#18243A',bg:'#F5F7FB'},{l:'응답 대기·확인 불가',n:`${r.unk.length+r.maybe.length}명`,color:'#18243A',bg:'#F5F7FB'},{l:'참석 어려움',n:`${r.no.length}명`,color:'#18243A',bg:'#F5F7FB'}],
+        tiles:[{l:'가능 응답',n:`${r.yes.length}`,color:'#18243A',bg:'#F5F7FB',icon:ic('check',16,'#137B57',2.5)},{l:'캘린더상 빈 시간',n:`${r.cal.length}`,color:'#18243A',bg:'#F5F7FB',icon:ic('calendar',16,'#2946B8',2)},{l:'확인 필요',n:`${r.unk.length+r.maybe.length}`,color:'#18243A',bg:'#F5F7FB',icon:ic('clock',16,'#925500',2)}],noNote:r.no.length?`참석 어려움 ${r.no.length}명 · ${r.no.map(id=>label(P[id])).join(', ')}`:'',hasNoNote:r.no.length>0,reqShort:(r.reqIds.length||s.policy==='all')?(okReq?'필수 참석자 일정 조건 충족':'필수 일정 조건 확인 필요'):'일정 필수 참석자 없음',reqShortColor:okReq?'#137B57':'#925500',reqShortIcon:ic(okReq?'circleCheck':'circleHelp',18,okReq?'#137B57':'#925500',2),
         prefLine:`선호 시간대 ${r.inPref?'일치':'다름'}${c.prefDay!=null?` · 선호 날짜 ${r.inDay?'일치':'다름'}`:''}`,
-        reason:parts.slice(0,2).join(' ')||'현재 확인된 정보 기준 후보예요.',issues,picked,cardBg:picked?'#F7F9FF':'#FFFFFF',reasonOpen:!!(s.openReason||{})[`${r.d}-${r.h}`],reasonLabel:(s.openReason||{})[`${r.d}-${r.h}`]?'추천 근거 접기':'추천 근거 자세히 보기',onToggleReason:()=>this.setState(st=>({openReason:{...(st.openReason||{}),[`${r.d}-${r.h}`]:!(st.openReason||{})[`${r.d}-${r.h}`]}})),border:picked?'2px solid #3654D4':'1px solid #E2E8F0',radioBorder:picked?'2px solid #3654D4':'2px solid #5B6B81',
-        onPick:()=>this.setState({pick:{d:r.d,h:r.h}}),raw:r,okReq};
+        reason:parts.slice(0,2).join(' ')||'현재 확인된 정보 기준 후보예요.',issues,picked,cardBg:picked?'#F4F6FF':'#FFFFFF',reasonOpen:!!(s.openReason||{})[`${r.d}-${r.h}`],reasonLabel:(s.openReason||{})[`${r.d}-${r.h}`]?'추천 근거 접기':'추천 근거 자세히 보기',onToggleReason:()=>this.setState(st=>({openReason:{...(st.openReason||{}),[`${r.d}-${r.h}`]:!(st.openReason||{})[`${r.d}-${r.h}`]}})),border:picked?'2px solid #3654D4':'1px solid #E2E8F0',radioBorder:picked?'2px solid #3654D4':'2px solid #5B6B81',
+        onPick:()=>this.setState(st=>({pick:st.pick&&st.pick.d===r.d&&st.pick.h===r.h?null:{d:r.d,h:r.h}})),onOpenSheet:()=>this.setState({reasonSheet:{d:r.d,h:r.h}}),raw:r,okReq};
     });
     const pickRec=recs.find(r=>r.picked);
     const hard=pickRec?pickRec.raw.no.length+pickRec.raw.maybe.length:0;
@@ -1432,6 +1450,15 @@ class Component extends DCLogic {
       mkRow('캘린더 일정 없음',recs.map(r=>`${r.raw.cal.length}명`)),
       mkRow('참석 어려움',recs.map(r=>`${r.raw.no.length}명`))
     ]:[];
+    // 후보 비교(세로형, 차이 중심)
+    const cmpRowsDef=[['가능 응답',r=>`${r.raw.yes.length}명`],['캘린더상 빈 시간',r=>`${r.raw.cal.length}명`],['확인 필요',r=>`${r.raw.unk.length+r.raw.maybe.length}명`],['참석 어려움',r=>`${r.raw.no.length}명`],['선호 시간대',r=>r.raw.inPref?'일치':'다름']];
+    const cmpDiff=cmpRowsDef.map(([l,f])=>new Set(recs.map(f)).size>1);
+    const cmpCards=recs.map(r=>({rank:r.isTop?r.topLabel:r.rankPlain,rankBg:r.isTop?'#E9EEFF':'#EDF1F7',rankFg:r.isTop?'#2946B8':'#5B6B81',rankW:r.isTop?600:500,isTop:r.isTop,dateMeta:r.dateMeta,time:r.timeMain,picked:r.picked,border:r.border,cardBg:r.cardBg,radioBorder:r.radioBorder,onPick:r.onPick,btnLabel:r.picked?'선택됨':'이 시간 선택',btnBg:r.picked?'#3654D4':'#FFFFFF',btnFg:r.picked?'#FFFFFF':'#18243A',btnBorder:r.picked?'1px solid #3654D4':'1px solid #E2E8F0',rows:cmpRowsDef.map(([l,f],k)=>({l,v:f(r),diff:cmpDiff[k],lc:cmpDiff[k]?'#18243A':'#5B6B81',vw:cmpDiff[k]?700:500,vc:cmpDiff[k]?'#18243A':'#5B6B81'}))}));
+    const cmpCommon=recs.length?[`${recs.every(r=>r.okReq)?'모두 필수 일정 조건을 충족해요':'필수 조건 충족 여부가 달라요'}`,`${(c&&c.duration)||60}분`,`참석자 ${n}명`].join(' · '):'';
+    const rsh=s.reasonSheet&&recs.find(r=>r.d===s.reasonSheet.d&&r.h===s.reasonSheet.h);
+    const reasonSheetVals=rsh?{showReasonSheet:true,rsTitle:'이 시간을 추천한 이유',rsWhen:`${rsh.dateMeta} · ${rsh.timeMain}`,rsSummary:`${rsh.reqShort} · 가능 응답 ${rsh.raw.yes.length}명`,rsSheetRows:rsh.sheetRows,rsHasUnsure:rsh.raw.unk.length+rsh.raw.maybe.length>0}:{showReasonSheet:false,rsTitle:'',rsWhen:'',rsSummary:'',rsSheetRows:[],rsHasUnsure:false};
+    const topRec=recs[0];const headline=!recs.length?'':tie?`조건에 맞는 시간 ${recs.length}개를 찾았어요`:(topRec.raw.unk.length+topRec.raw.maybe.length>0&&!topRec.okReq)?'현재 정보로 추천할 수 있는 시간이에요':`가장 적합한 시간은 ${fmt(topRec.h*60).replace(/:00$/,'').replace(/ (\d+)$/,' $1시')}예요`;
+    const headSub=!recs.length?'':tie?'참석 가능성이 비슷해요. 선호하는 시간을 선택해 주세요.':(topRec.raw.unk.length+topRec.raw.maybe.length>0&&!topRec.okReq)?'아직 확인되지 않은 참석자가 있어 최종 가능 여부는 달라질 수 있어요.':'필수 일정 조건을 충족하고, 가능한 것으로 확인된 인원이 가장 많은 후보예요.';
     const recLoading=scr==='recs'&&s.recState==='loading',recError=scr==='recs'&&s.recState==='error',ready=scr==='recs'&&valid&&s.recState==='ready';
     const reqIdsSel=s.policy==='all'?[]:s.selected.filter(id=>s.required[id]);
     const impactText=showImpact?`이 시간에는 ${hard}명이 참석하기 어려워요. 모두 가능한 다른 후보가 있어요 (${DAYS[altR.d].short} ${fmt(altR.h*60)}).`:'';
@@ -1603,21 +1630,22 @@ class Component extends DCLogic {
         if(chg.mode){ch.push(`참석 방식을 ${nc.mode}(으)로`);nc.src.mode='user'}
         this.setState({sheet:null,closeAsk:false});if(ch.length)this.applyConds(nc,ch);},
       // 추천
-      condLine:c?[c.days?rangeText(c.days):'날짜 미정',`${c.duration||60}분`,c.timePref||'시간대 상관없음',c.mode||'온라인',`${n}명`].join(' · '):'',
+      condLine:c?[c.days?rangeText(c.days).replace(/ 하루$/,'').replace(/ \((.)\)/,'($1)'):'날짜 미정',c.timePref||'시간대 상관없음',`${c.duration||60}분`].join(' · '):'',condLine2:c?[c.mode||'온라인',`참석자 ${n}명`,reqIdsSel.length?`일정 필수 ${reqIdsSel.length}명`:'일정 필수 없음'].join(' · '):'',
       policyLine:s.policy==='all'?'전원 일정 조건 충족':`일정 필수 참석자 우선${reqIdsSel.length?` · ${reqIdsSel.length}명`:''}`,
       policyRule:s.policy==='all'?'전원 참석 필요: 한 명이라도 명확히 불가인 시간은 제외해요.':'일정 필수 참석자가 명확히 불가인 시간은 점수와 관계없이 제외해요.',
       showInvalidBanner:s.invalidated&&(recLoading||recError),recLoading,recError,skeletons:[{k:1},{k:2},{k:3}],onRetryRecs:this.startRecalc,
       recTitle:recs.length?`추천 후보 ${recs.length}개를 찾았어요`:'',recN:recs.length,
+      nPeople:n,headline,headSub,headMeta:recs.length?`추천 후보 ${recs.length}개 · 참석자 ${n}명`:'',cmpCards,cmpCommon,...reasonSheetVals,onCloseReasonSheet:()=>this.setState({reasonSheet:null}),isCmpView:ready&&recs.length>0&&s.recView==='table',critOpen:!!s.critOpen,onToggleCrit:()=>this.setState(st=>({critOpen:!st.critOpen})),critLabel:s.critOpen?'접기':'펼치기',
       recSubtitle:recs.length?`${tie?'1순위 후보가 동률이에요 · ':''}참석자 ${n}명${reqIdsSel.length?` · 일정 필수 ${reqIdsSel.length}명`:''}`:'',
       hasRecs:ready&&recs.length>0,noRecs:ready&&!recs.length,isCardView:ready&&recs.length>0&&s.recView==='card',isTableView:ready&&recs.length>0&&s.recView==='table',
       recsPadBottom:showImpact?260:150,
       noRecsText:s.policy==='all'?'전원이 가능한 시간이 선택한 기간에 없어요. 기간을 넓히거나 ‘일정 필수 참석자 우선’ 정책을 검토해 보세요.':reqIdsSel.length?`일정 필수 참석자 ${reqIdsSel.map(id=>label(P[id])).join(', ')}님이 가능한 시간이 없어요. 기간을 넓히거나 일정 필수 설정을 조정해 보세요.`:'선택한 기간에 맞는 시간이 없어요. 기간을 넓히거나 회의 길이를 줄여 보세요.',
-      viewOpts:this.seg([{v:'card',l:'카드'},{v:'table',l:'후보 비교'}],s.recView,v=>this.setState({recView:v}),['layoutList','columns2']),
+      viewOpts:this.seg([{v:'card',l:'카드'},{v:'table',l:'후보 비교'}],s.recView,v=>this.setState({recView:v})),
       showCriteria:s.showCriteria,onToggleCriteria:()=>this.setState({showCriteria:!s.showCriteria}),
       recs,tableHead,tableRows,tableCols:`92px repeat(${Math.max(recs.length,1)},minmax(0,1fr))`,
-      showExcluded:ready&&excluded>0&&recs.length>0,excludedText:`${s.policy==='all'?'참석이 어려운 사람이 있는':'일정 필수 참석자가 불가능한'} 시간 ${excluded}개는 점수와 관계없이 제외했어요.`,
+      showExcluded:ready&&excluded>0&&recs.length>0,excludedText:`${s.policy==='all'?'참석이 어려운 사람이 있는':'필수 일정 조건에 맞지 않는'} 시간 ${excluded}개를 제외했어요.`,
       showImpact,impactText,onPickAlt:pickAlt,onPickAltBack:()=>{pickAlt();this.setState({screen:'recs'})},
-      recCtaLabel:pickRec?'선택한 시간 검토':'후보를 선택해 주세요',recCtaDisabled:!pickRec,recCtaBg:pickRec?'#3654D4':'#E9EDF3',recCtaFg:pickRec?'#FFFFFF':'#5B6B81',
+      recCtaLabel:pickRec?`${fmt(pickRec.h*60)} 선택 · 최종 검토`:'후보를 선택해 주세요',recCtaDisabled:!pickRec,recCtaBg:pickRec?'#3654D4':'#E9EDF3',recCtaFg:pickRec?'#FFFFFF':'#5B6B81',
       onToReview:()=>{if(pickRec)this.setState({screen:'review',confirmErr:null});else this.toast('추천 후보 중 하나를 선택해 주세요')},
       onBackRecs:()=>{if(!s.confirming)this.setState({screen:'recs'})},
       // 검토
