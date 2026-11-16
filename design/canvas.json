@@ -4,7 +4,7 @@
   "v": 1,
   "at": "2026-11-16T01:06:00Z"
  },
- "title": "NODI 서비스 시안 v4 · 아트보드",
+ "title": "NODI 서비스 시안 v6 · 아트보드",
  "launch": {
   "view": "canvas"
  },
@@ -220,7 +220,14 @@
   "13-resched-review.dc.html",
   "14-inbox.dc.html",
   "15-request.dc.html",
-  "16-request-stale.dc.html"
+  "16-request-stale.dc.html",
+  "17-ai-fail.dc.html",
+  "18-sheet-nosearch.dc.html",
+  "19-sheet-zero.dc.html",
+  "20-rec-loading.dc.html",
+  "21-rec-error.dc.html",
+  "22-rec-none.dc.html",
+  "23-resched-empty.dc.html"
  ],
  "notes": {
   "rowA": {
@@ -248,6 +255,13 @@
    "x": 1640,
    "y": 3620,
    "text": "받은 요청",
+   "kind": "title1",
+   "maxW": 2390
+  },
+  "rowE": {
+   "x": 1640,
+   "y": 4920,
+   "text": "로딩 · 오류 · 빈 상태",
    "kind": "title1",
    "maxW": 2390
   }
