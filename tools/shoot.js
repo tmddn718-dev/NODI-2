@@ -13,7 +13,7 @@ const ROOT = path.join(__dirname, '..');
 const src = opt('--src', path.join(ROOT, 'design/Main.dc.html'));
 const outdir = opt('--out', path.join(ROOT, 'shots'));
 const W = Number(opt('--width', 414));
-const SEEDS = opt('--seeds', 'chat,conds,edit,sheetPick,sheetReq,progress,recs,review,done,meetings,detail,reschedAsk,resched,rsReview,inbox,request,stale').split(',');
+const SEEDS = opt('--seeds', 'chat,aiFail,conds,edit,sheetPick,sheetReq,sheetNone,sheetZero,progress,recLoad,recErr,recNone,recs,review,done,meetings,detail,reschedAsk,resched,reschedEmpty,rsReview,inbox,request,stale').split(',');
 const ASSETS = path.join(path.dirname(src), 'assets');
 const html = fs.readFileSync(src, 'utf8');
 const tpl = html.match(/<x-dc>([\s\S]*)<\/x-dc>/)[1].replace(/assets\/([\w-]+\.svg)/g, (m, f) => {

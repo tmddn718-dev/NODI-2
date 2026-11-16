@@ -145,6 +145,62 @@
    "h": 868,
    "title": "16 조건 변경된 요청",
    "is_interactive": true
+  },
+  "17-ai-fail.dc.html": {
+   "x": 1640,
+   "y": 5200,
+   "w": 414,
+   "h": 868,
+   "title": "17 AI 해석 실패",
+   "is_interactive": true
+  },
+  "18-sheet-nosearch.dc.html": {
+   "x": 2134,
+   "y": 5200,
+   "w": 414,
+   "h": 868,
+   "title": "18 참석자 검색 결과 없음",
+   "is_interactive": true
+  },
+  "19-sheet-zero.dc.html": {
+   "x": 2628,
+   "y": 5200,
+   "w": 414,
+   "h": 868,
+   "title": "19 참석자 선택 0명",
+   "is_interactive": true
+  },
+  "20-rec-loading.dc.html": {
+   "x": 3122,
+   "y": 5200,
+   "w": 414,
+   "h": 868,
+   "title": "20 추천 계산 중",
+   "is_interactive": true
+  },
+  "21-rec-error.dc.html": {
+   "x": 3616,
+   "y": 5200,
+   "w": 414,
+   "h": 868,
+   "title": "21 추천 계산 오류",
+   "is_interactive": true
+  },
+  "22-rec-none.dc.html": {
+   "x": 1640,
+   "y": 6500,
+   "w": 414,
+   "h": 868,
+   "title": "22 추천 후보 없음",
+   "is_interactive": true
+  },
+  "23-resched-empty.dc.html": {
+   "x": 2134,
+   "y": 6500,
+   "w": 414,
+   "h": 868,
+   "title": "23 재조율 후보 없음",
+   "is_interactive": true
   }
  },
  "order": [
