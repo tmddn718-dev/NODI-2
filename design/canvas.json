@@ -201,6 +201,30 @@
    "h": 868,
    "title": "23 재조율 후보 없음",
    "is_interactive": true
+  },
+  "24-home.dc.html": {
+   "x": 1640,
+   "y": 7800,
+   "w": 414,
+   "h": 868,
+   "title": "24 홈 · 이전 회의·이어하기",
+   "is_interactive": true
+  },
+  "25-reuse-sheet.dc.html": {
+   "x": 2134,
+   "y": 7800,
+   "w": 414,
+   "h": 868,
+   "title": "25 이전 회의 선택",
+   "is_interactive": true
+  },
+  "26-reuse-conds.dc.html": {
+   "x": 2628,
+   "y": 7800,
+   "w": 414,
+   "h": 868,
+   "title": "26 이전 회의 기반 조건 확인",
+   "is_interactive": true
   }
  },
  "order": [
@@ -227,7 +251,10 @@
   "20-rec-loading.dc.html",
   "21-rec-error.dc.html",
   "22-rec-none.dc.html",
-  "23-resched-empty.dc.html"
+  "23-resched-empty.dc.html",
+  "24-home.dc.html",
+  "25-reuse-sheet.dc.html",
+  "26-reuse-conds.dc.html"
  ],
  "notes": {
   "rowA": {
@@ -262,6 +289,13 @@
    "x": 1640,
    "y": 4920,
    "text": "로딩 · 오류 · 빈 상태",
+   "kind": "title1",
+   "maxW": 2390
+  },
+  "rowF": {
+   "x": 1640,
+   "y": 7520,
+   "text": "홈 · 이전 회의 재사용",
    "kind": "title1",
    "maxW": 2390
   }

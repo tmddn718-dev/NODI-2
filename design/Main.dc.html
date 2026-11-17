@@ -82,7 +82,19 @@ body{font-variant-numeric:tabular-nums}
               <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="font-weight:600;color:#2946B8;">{{ stepNow }}</span><span style="color:#5B6B81;">{{ stepNext }}</span></div>
             </div>
             <div ref="{{ chatRef }}" onScroll="{{ onChatScroll }}" style="position:absolute;top:146px;left:0;right:0;bottom:{{ chatBottom }}px;overflow-y:auto;scrollbar-width:none;padding:8px 16px 32px;display:flex;flex-direction:column;gap:12px;">
-              <div style="align-self:center;font-size:13px;font-weight:500;color:#5B6B81;padding:4px 0;">오늘 · 11월 16일 (월)</div>
+              <sc-if value="{{ isHome }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:24px;padding:12px 4px 0;">
+                  <div style="display:flex;flex-direction:column;gap:8px;"><div style="font-size:24px;line-height:32px;font-weight:700;color:#18243A;">어떤 회의를 잡아드릴까요?</div><div style="font-size:16px;line-height:24px;color:#5B6B81;">필요한 조건을 편하게 말씀해 주세요.</div></div>
+                  <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px;">
+                    <span style="font-size:13px;line-height:20px;color:#5B6B81;">예를 들어 이렇게 말해보세요</span>
+                    <button onClick="{{ onEg }}" style="text-align:left;min-height:48px;padding:12px 16px;border-radius:14px;border:none;background:#F5F7FB;color:#18243A;font-size:16px;line-height:24px;font-weight:600;cursor:pointer;text-wrap:pretty;">{{ homeEg }}</button>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ homeChips }}" as="hc" hint-placeholder-count="3"><button onClick="{{ hc.onClick }}" style="min-height:44px;padding:0 16px;border-radius:999px;border:1px solid #E2E8F0;background:#FFFFFF;color:#18243A;font-size:14px;font-weight:600;cursor:pointer;">{{ hc.label }}</button></sc-for></div>
+                  </div>
+                  <sc-if value="{{ hasReuse }}"><button onClick="{{ onOpenReuse }}" aria-haspopup="dialog" style="width:100%;min-height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;border-radius:16px;border:1px solid #E2E8F0;background:#FFFFFF;color:#18243A;font-size:16px;font-weight:600;cursor:pointer;text-align:left;"><span style="display:flex;flex-shrink:0;">{{ iconHistory }}</span><span style="flex:1;">이전 회의로 새 일정 잡기</span><span aria-hidden="true" style="display:flex;color:#5B6B81;">{{ I.next }}</span></button></sc-if>
+                  <sc-if value="{{ hasDraft }}"><div style="background:#FFFFFF;border:1px solid #C9D4FF;border-radius:20px;padding:16px;display:flex;align-items:center;gap:12px;"><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;"><span style="align-self:flex-start;height:24px;padding:0 8px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:#E9EEFF;color:#2946B8;">작성 중</span><span style="font-size:16px;line-height:24px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ draftTitle }}</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ draftStep }}</span></div><button onClick="{{ onResume }}" style="flex-shrink:0;height:44px;padding:0 16px;border-radius:999px;border:none;background:#3654D4;color:#FFFFFF;font-size:14px;font-weight:600;cursor:pointer;">이어서 진행</button></div></sc-if>
+                </div>
+              </sc-if>
+              <sc-if value="{{ notHome }}" hint-placeholder-val="{{ true }}"><div style="align-self:center;font-size:13px;font-weight:500;color:#5B6B81;padding:4px 0;">오늘 · 11월 16일 (월)</div></sc-if>
               <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="2">
                 <sc-if value="{{ m.isUser }}"><div data-mid="{{ m.id }}" style="align-self:flex-end;max-width:84%;background:#E1E8FF;color:#18243A;padding:12px 16px;border-radius:16px 16px 4px 16px;font-size:16px;line-height:1.5;white-space:pre-wrap;">{{ m.text }}</div></sc-if>
                 <sc-if value="{{ m.isAi }}">
@@ -105,28 +117,38 @@ body{font-variant-numeric:tabular-nums}
                   </div>
                 </sc-if>
                 <sc-if value="{{ m.isConds }}">
-                  <div style="margin-left:40px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;opacity:{{ m.cardOpacity }};">
+                  <div style="margin-left:40px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:16px;opacity:{{ m.cardOpacity }};">
                     <div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;">
-                      <span style="height:26px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:{{ m.badgeBg }};color:{{ m.badgeFg }};white-space:nowrap;">{{ m.badge }}</span>
-                      <div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:18px;font-weight:600;line-height:26px;color:#18243A;">회의 조건을 확인해 주세요</div><sc-if value="{{ m.live }}"><span style="font-size:14px;line-height:21px;color:#5B6B81;">말씀하신 내용을 정리했어요. 필요한 항목만 수정할 수 있어요.</span></sc-if></div>
+                      <span style="height:28px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:{{ m.badgeBg }};color:{{ m.badgeFg }};white-space:nowrap;">{{ m.badge }}</span>
+                      <div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:18px;font-weight:600;line-height:26px;color:#18243A;">회의 조건을 확인해 주세요</div><sc-if value="{{ m.live }}"><span style="font-size:14px;line-height:21px;color:#5B6B81;">다르게 이해한 부분만 수정하면 돼요.</span></sc-if></div>
                     </div>
-                    <div style="display:flex;flex-direction:column;gap:0;">
-                      <sc-for list="{{ m.rows }}" as="r" hint-placeholder-count="5">
-                        <button onClick="{{ r.onEdit }}" aria-disabled="{{ r.noEdit }}" aria-label="{{ r.editAria }}" style="width:100%;min-height:44px;display:flex;align-items:flex-start;gap:8px;padding:8px 0;border:none;background:transparent;text-align:left;cursor:pointer;color:#18243A;font-size:16px;line-height:1.45;">
-                          <div style="width:72px;flex-shrink:0;color:#5B6B81;font-size:14px;padding-top:1px;">{{ r.label }}</div>
-                          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
-                            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span style="font-weight:600;color:{{ r.color }};">{{ r.value }}</span><sc-if value="{{ r.hasTag }}"><span style="flex-shrink:0;height:24px;padding:0 8px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:{{ r.tagBg }};color:{{ r.tagFg }};">{{ r.tag }}</span></sc-if></div>
-                            <sc-if value="{{ r.hasSub }}"><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ r.sub }}</span></sc-if>
-                          </div>
-                          <sc-if value="{{ r.canEdit }}"><span aria-hidden="true" style="display:flex;color:#5B6B81;padding-top:4px;flex-shrink:0;">{{ I.chevronSm }}</span></sc-if>
-                        </button>
-                      </sc-for>
+                    <button onClick="{{ m.cTitleEdit }}" aria-disabled="{{ m.noEdit }}" aria-label="회의 제목 {{ m.cTitle }} · 눌러서 수정" style="width:100%;min-height:56px;display:flex;align-items:center;gap:8px;padding:0;border:none;background:transparent;text-align:left;cursor:pointer;color:#18243A;">
+                      <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;"><span style="font-size:13px;line-height:20px;color:#5B6B81;">회의 제목</span><span style="font-size:18px;line-height:26px;font-weight:600;overflow-wrap:anywhere;">{{ m.cTitle }}</span><sc-if value="{{ m.cTitleSub }}"><span style="font-size:13px;line-height:20px;color:#5B6B81;">{{ m.cTitleSub }}</span></sc-if></span>
+                      <sc-if value="{{ m.cTitleTag.has }}"><span style="flex-shrink:0;height:24px;padding:0 8px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:{{ m.cTitleTag.bg }};color:{{ m.cTitleTag.fg }};">{{ m.cTitleTag.label }}</span></sc-if>
+                      <sc-if value="{{ m.live }}"><span aria-hidden="true" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ m.iconPencil }}</span></sc-if>
+                    </button>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:8px;">
+                      <button onClick="{{ m.cDateEdit }}" aria-disabled="{{ m.noEdit }}" aria-label="날짜 {{ m.cDate }} · 눌러서 수정" style="min-height:92px;text-align:left;display:flex;flex-direction:column;gap:4px;padding:12px 16px;border:none;border-radius:16px;background:#F5F7FB;cursor:pointer;color:#18243A;">
+                        <span style="display:flex;align-items:center;gap:4px;font-size:13px;line-height:20px;color:#5B6B81;"><span style="display:flex;">{{ m.iconCal }}</span>날짜</span>
+                        <span style="font-size:16px;line-height:24px;font-weight:600;overflow-wrap:anywhere;">{{ m.cDate }}</span>
+                        <span style="display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;font-size:13px;line-height:20px;color:#5B6B81;">{{ m.cDateSub }}<sc-if value="{{ m.cDateTag.has }}"><span style="height:24px;padding:0 8px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:{{ m.cDateTag.bg }};color:{{ m.cDateTag.fg }};">{{ m.cDateTag.label }}</span></sc-if></span>
+                      </button>
+                      <button onClick="{{ m.cTimeEdit }}" aria-disabled="{{ m.noEdit }}" aria-label="시간 {{ m.cTime }} · 눌러서 수정" style="min-height:92px;text-align:left;display:flex;flex-direction:column;gap:4px;padding:12px 16px;border:none;border-radius:16px;background:#F5F7FB;cursor:pointer;color:#18243A;">
+                        <span style="display:flex;align-items:center;gap:4px;font-size:13px;line-height:20px;color:#5B6B81;"><span style="display:flex;">{{ m.iconClock }}</span>시간</span>
+                        <span style="font-size:16px;line-height:24px;font-weight:600;overflow-wrap:anywhere;">{{ m.cTime }}</span>
+                        <span style="display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;font-size:13px;line-height:20px;color:#5B6B81;">{{ m.cTimeSub }}<sc-if value="{{ m.cTimeTag.has }}"><span style="height:24px;padding:0 8px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:{{ m.cTimeTag.bg }};color:{{ m.cTimeTag.fg }};">{{ m.cTimeTag.label }}</span></sc-if></span>
+                      </button>
+                    </div>
+                    <div style="display:flex;flex-direction:column;">
+                      <button onClick="{{ m.cModeEdit }}" aria-disabled="{{ m.noEdit }}" aria-label="참석 방식 {{ m.cMode }} · 눌러서 수정" style="width:100%;min-height:48px;display:flex;align-items:center;gap:8px;padding:0;border:none;border-top:1px solid #EDF1F7;background:transparent;text-align:left;cursor:pointer;color:#18243A;"><span style="flex:1;font-size:16px;line-height:24px;font-weight:500;">{{ m.cMode }}</span><sc-if value="{{ m.cModeTag.has }}"><span style="height:24px;padding:0 8px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:{{ m.cModeTag.bg }};color:{{ m.cModeTag.fg }};">{{ m.cModeTag.label }}</span></sc-if></button>
+                      <button onClick="{{ m.cAttEdit }}" aria-disabled="{{ m.noEdit }}" aria-label="참석자 {{ m.cAtt }} · 눌러서 수정" style="width:100%;min-height:56px;display:flex;align-items:center;gap:8px;padding:8px 0;border:none;border-top:1px solid #EDF1F7;background:transparent;text-align:left;cursor:pointer;color:#18243A;"><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;"><span style="font-size:16px;line-height:24px;font-weight:500;overflow-wrap:anywhere;">{{ m.cAtt }}</span><sc-if value="{{ m.cAttSub }}"><span style="font-size:13px;line-height:20px;color:#5B6B81;">{{ m.cAttSub }}</span></sc-if></span><sc-if value="{{ m.cAttBadge }}"><span style="flex-shrink:0;height:24px;padding:0 8px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:#FFF3DC;color:#925500;">{{ m.cAttBadgeText }}</span></sc-if><sc-if value="{{ m.cAttTag.has }}"><span style="flex-shrink:0;height:24px;padding:0 8px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:{{ m.cAttTag.bg }};color:{{ m.cAttTag.fg }};">{{ m.cAttTag.label }}</span></sc-if></button>
+                      <sc-for list="{{ m.cExtra }}" as="ex" hint-placeholder-count="1"><button onClick="{{ ex.onEdit }}" style="width:100%;min-height:48px;display:flex;align-items:center;gap:8px;padding:8px 0;border:none;border-top:1px solid #EDF1F7;background:transparent;text-align:left;cursor:pointer;color:#18243A;"><span style="width:72px;flex-shrink:0;font-size:14px;color:#5B6B81;">{{ ex.label }}</span><span style="flex:1;min-width:0;font-size:16px;line-height:24px;font-weight:500;overflow-wrap:anywhere;">{{ ex.value }}</span><sc-if value="{{ ex.tag.has }}"><span style="flex-shrink:0;height:24px;padding:0 8px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:{{ ex.tag.bg }};color:{{ ex.tag.fg }};">{{ ex.tag.label }}</span></sc-if></button></sc-for>
                     </div>
                     <sc-if value="{{ m.live }}">
-                      <sc-if value="{{ m.hasAsk }}"><div style="font-size:14px;line-height:1.5;color:{{ m.askColor }};background:{{ m.askBg }};border-radius:12px;padding:12px 12px;">{{ m.ask }}</div></sc-if>
-                      <div style="display:flex;flex-direction:column-reverse;gap:4px;">
-                        <sc-if value="{{ m.showEditBtn }}"><button onClick="{{ onOpenEdit }}" style="height:44px;border-radius:14px;border:none;background:transparent;color:#18243A;font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">조건 수정</button></sc-if>
-                        <button onClick="{{ m.onNext }}" aria-disabled="{{ m.nextDisabled }}" style="flex:none;width:100%;height:52px;border-radius:14px;border:none;background:{{ m.nextBg }};color:{{ m.nextFg }};font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">{{ m.nextLabel }}</button>
+                      <sc-if value="{{ m.hasAsk }}"><div style="font-size:14px;line-height:1.5;color:{{ m.askColor }};background:{{ m.askBg }};border-radius:12px;padding:12px;">{{ m.ask }}</div></sc-if>
+                      <div style="display:flex;flex-direction:column;gap:4px;">
+                        <button onClick="{{ m.onNext }}" aria-disabled="{{ m.nextDisabled }}" style="width:100%;height:56px;border-radius:14px;border:none;background:{{ m.nextBg }};color:{{ m.nextFg }};font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;">{{ m.nextLabel }}</button>
+                        <button onClick="{{ m.onSpeak }}" style="width:100%;height:48px;border:none;background:transparent;color:#18243A;font-size:16px;font-weight:600;cursor:pointer;">직접 입력</button>
                       </div>
                     </sc-if>
                   </div>
@@ -153,13 +175,15 @@ body{font-variant-numeric:tabular-nums}
             <sc-if value="{{ showNewMsg }}" hint-placeholder-val="{{ false }}">
               <button onClick="{{ onJumpBottom }}" style="position:absolute;left:50%;transform:translateX(-50%);bottom:{{ newMsgBottom }}px;z-index:5;height:44px;padding:0 16px;border-radius:22px;border:none;background:#18243A;color:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgb(24 36 58 / 0.16);display:flex;align-items:center;gap:8px;">새 메시지</button>
             </sc-if>
+            <sc-if value="{{ showComposer }}" hint-placeholder-val="{{ true }}">
             <div style="position:absolute;left:0;right:0;bottom:{{ composerBottom }}px;padding:8px 16px;background:transparent;z-index:6;">
               <div style="display:flex;align-items:center;gap:8px;height:56px;padding:0 8px 0 20px;background:#FFFFFF;border:{{ composerBorder }};border-radius:28px;box-sizing:border-box;">
                 <label for="nodi-chat-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">회의 조건 입력</label>
-                <input id="nodi-chat-input" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" onFocus="{{ onFocusInput }}" placeholder="회의 조건을 말씀해 주세요" style="flex:1;min-width:0;align-self:stretch;border:none;outline:none;background:transparent;font-size:16px;color:#18243A;">
+                <input id="nodi-chat-input" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" onFocus="{{ onFocusInput }}" placeholder="{{ inputPh }}" style="flex:1;min-width:0;align-self:stretch;border:none;outline:none;background:transparent;font-size:16px;color:#18243A;">
                 <button onClick="{{ onSend }}" aria-label="보내기" style="width:44px;height:44px;border-radius:22px;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;background:{{ sendBg }};color:{{ sendFg }};">{{ I.up }}</button>
               </div>
             </div>
+            </sc-if>
             <sc-if value="{{ showKb }}" hint-placeholder-val="{{ false }}">
               <div style="position:absolute;left:0;right:0;bottom:0;height:291px;background:#D4D9E1;z-index:12;display:flex;flex-direction:column;gap:8px;padding:4px 4px 0;box-sizing:border-box;">
                 <div style="display:flex;justify-content:space-between;align-items:center;padding:0 4px 0 12px;height:36px;"><span style="font-size:13px;color:#18243A;">키보드 시뮬레이션 · 탭 바 숨김</span><button onClick="{{ onHideKb }}" style="height:36px;padding:0 12px;border-radius:8px;border:none;background:#FFFFFF;color:#2946B8;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;">키보드 내리기</button></div>
@@ -319,6 +343,20 @@ body{font-variant-numeric:tabular-nums}
                   <sc-for list="{{ rsSheetRows }}" as="pr" hint-placeholder-count="3"><div style="display:flex;gap:12px;align-items:flex-start;padding:16px 0;border-top:1px solid #EDF1F7;"><span style="width:40px;height:40px;border-radius:20px;background:{{ pr.avBg }};color:{{ pr.avFg }};font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ pr.initials }}</span><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;"><span style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:16px;line-height:24px;font-weight:600;">{{ pr.name }}<sc-if value="{{ pr.need }}"><span style="height:22px;padding:0 8px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:#E3E8F0;color:#18243A;">일정 필수</span></sc-if></span><span style="align-self:flex-start;height:26px;padding:0 12px;border-radius:999px;background:{{ pr.bg }};color:{{ pr.color }};font-size:13px;font-weight:600;display:flex;align-items:center;">{{ pr.state }}</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ pr.sub }}</span></div></div></sc-for>
                 </div>
                 <div style="padding:12px 20px 34px;border-top:1px solid #EDF1F7;font-size:13px;line-height:20px;color:#5B6B81;">캘린더상 충돌이 없다는 것은 참석 확정을 의미하지 않아요. 일정 필수는 시간 추천 조건이며 참석 수락과 달라요.</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showReuse }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;z-index:20;background:rgb(24 36 58 / 0.56);display:flex;align-items:flex-end;" onClick="{{ onCloseReuse }}">
+              <div role="dialog" aria-modal="true" aria-label="어떤 회의를 다시 잡을까요?" onClick="{{ onReuseStop }}" style="width:100%;height:78%;background:#FFFFFF;border-radius:24px 24px 0 0;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden;animation:nodiRise .24s cubic-bezier(.22,1,.36,1) both;">
+                <div style="display:flex;justify-content:center;padding:8px 0 0;"><span style="width:40px;height:4px;border-radius:2px;background:#E2E8F0;"></span></div>
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:12px 20px 8px;"><div style="display:flex;flex-direction:column;gap:4px;"><span style="font-size:20px;line-height:28px;font-weight:700;">어떤 회의를 다시 잡을까요?</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">지난 회의의 참석자와 기본 조건을 가져와요.</span></div><button onClick="{{ onCloseReuse }}" aria-label="닫기" style="width:44px;height:44px;border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#18243A;flex-shrink:0;">{{ I.x }}</button></div>
+                <div style="padding:8px 20px 12px;"><label for="nodi-reuse-q" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">회의 제목 검색</label><div style="display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;border-radius:24px;background:#F1F3F9;"><span style="display:flex;color:#5B6B81;">{{ I.search }}</span><input id="nodi-reuse-q" value="{{ reuseQ }}" onChange="{{ onReuseQ }}" placeholder="회의 제목 검색" style="flex:1;min-width:0;height:100%;border:none;outline:none;background:transparent;font-size:16px;color:#18243A;"></div></div>
+                <div style="flex:1 1 auto;min-height:120px;overflow-y:auto;padding:0 20px 34px;display:flex;flex-direction:column;">
+                  <sc-for list="{{ reuseList }}" as="rm" hint-placeholder-count="3"><button onClick="{{ rm.onPick }}" style="width:100%;min-height:72px;display:flex;align-items:center;gap:12px;padding:12px 0;border:none;border-top:1px solid #EDF1F7;background:transparent;text-align:left;cursor:pointer;color:#18243A;"><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;"><span style="font-size:16px;line-height:24px;font-weight:600;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">{{ rm.title }}</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ rm.sub }}</span><span style="font-size:13px;line-height:20px;color:#5B6B81;">{{ rm.when }} 진행</span></span><span aria-hidden="true" style="display:flex;color:#5B6B81;flex-shrink:0;">{{ I.next }}</span></button></sc-for>
+                  <sc-if value="{{ reuseEmpty }}"><div style="padding:40px 8px;text-align:center;display:flex;flex-direction:column;gap:8px;"><span style="font-size:16px;line-height:24px;font-weight:600;">일치하는 회의가 없어요</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">다른 제목으로 검색해 보세요.</span></div></sc-if>
+                </div>
               </div>
             </div>
           </sc-if>
@@ -782,7 +820,7 @@ body{font-variant-numeric:tabular-nums}
                       <span style="font-size:14px;line-height:21px;color:#5B6B81;">평일 11월 17일–27일 중에서 고를 수 있어요 (데모 범위)</span>
                     </div>
                   </sc-if>
-                  <div style="display:flex;flex-direction:column;gap:2px;background:#F4F6FF;border-radius:12px;padding:12px 16px;"><span style="font-size:16px;font-weight:600;color:#2946B8;">{{ draftDateText }}</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ draftDateHint }}</span></div>
+                  <div style="display:flex;flex-direction:column;gap:2px;background:#F4F6FF;border-radius:12px;padding:12px 16px;"><span style="font-size:16px;font-weight:600;color:#2946B8;">{{ draftDateText }}</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ draftDateHint }}</span><sc-if value="{{ draftBasis }}"><span style="font-size:13px;line-height:20px;color:#5B6B81;">{{ draftBasis }}</span></sc-if></div>
                   <sc-if value="{{ showPrefDay }}">
                     <div style="display:flex;flex-direction:column;gap:8px;"><span style="font-size:14px;font-weight:600;color:{{ lblPrefDayColor }};">{{ lblPrefDay }}</span><div style="display:flex;gap:8px;flex-wrap:wrap;"><sc-for list="{{ prefDayOpts }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.onClick }}" aria-pressed="{{ o.on }}" style="height:44px;padding:0 16px;border-radius:22px;font-size:14px;font-weight:600;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }};border:{{ o.border }};">{{ o.label }}</button></sc-for></div><span style="font-size:14px;line-height:21px;color:#5B6B81;">기간 안에서 찾되, 선호 날짜를 조금 더 우선해요.</span></div>
                   </sc-if>
@@ -830,7 +868,8 @@ body{font-variant-numeric:tabular-nums}
     <sc-if value="{{ showDocs }}" hint-placeholder-val="{{ true }}"><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:24px;">
       <div style="display:flex;gap:8px;align-items:center;font-size:14px;font-weight:500;color:#5B6B81;"><span style="background:#E9EEFF;color:#18243A;padding:4px 12px;border-radius:999px;">디자인 시스템 · 검증</span><span>v5.2 변경 사항 · 디자인 토큰</span></div>
 
-      <div style="background:#FFFFFF;border:2px solid #A9BCFF;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:16px;"><div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:22px;line-height:30px;font-weight:700;">v5.2 · 토스 레퍼런스로 디자인 품질 개선</div><div style="font-size:16px;line-height:24px;color:#5B6B81;">유아이볼의 토스 화면에서 ‘특징’만 가져왔어요(토스 로고·아이콘·에셋·화면 구성은 쓰지 않음). 3D 일러스트는 NODI 블루로 새로 그린 오리지널 SVG예요.</div></div><div style="display:flex;gap:16px;align-items:flex-end;padding:8px 0;"><img src="assets/nodi-3d-calendar.svg" alt="저장 완료 일러스트" width="96" height="96"><img src="assets/nodi-3d-clock.svg" alt="재조율 일러스트" width="96" height="96"><img src="assets/nodi-3d-calendar-empty.svg" alt="빈 상태 일러스트" width="96" height="96"></div><div style="display:grid;grid-template-columns:150px minmax(0,1fr);font-size:14px;line-height:21px;border:1px solid #E2E8F0;border-radius:16px;overflow:hidden;"><div style="padding:12px;background:#F5F7FB;font-weight:600;">가져온 특징</div><div style="padding:12px;background:#F5F7FB;font-weight:600;">NODI 적용</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">완료 순간의 입체 오브젝트</div><div style="padding:12px;border-top:1px solid #E2E8F0;">08 완료: 3D 달력 + 체크(132px, 한 번만 떠오르는 등장 모션) · 11 재조율 모달: 3D 시계 · 내 회의 빈 상태·추천 없음: 회색 3D 달력</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">핵심 숫자를 제목 안에서 강조</div><div style="padding:12px;border-top:1px solid #E2E8F0;">08 ‘<b style="color:#3654D4">11월 24일 오후 2:00</b> 회의가 저장됐어요’ · 05 ‘<b style="color:#3654D4">2/3명</b> 응답 완료’ · 06 ‘추천 후보 <b style="color:#3654D4">3개</b>를 찾았어요’</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">굵고 큰 질문형 헤드라인</div><div style="padding:12px;border-top:1px solid #E2E8F0;">주요 화면 제목 24–26px Bold, 모달 제목 가운데 정렬</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">섹션 제목의 분명한 위계</div><div style="padding:12px;border-top:1px solid #E2E8F0;">작은 회색 라벨(14px) → 진한 섹션 제목(17px Semibold, Navy)</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">절제된 장식</div><div style="padding:12px;border-top:1px solid #E2E8F0;">3D는 완료·재조율·빈 상태의 순간에만, 나머지 화면은 지금처럼 차분하게</div></div></div>
+      <div style="background:#FFFFFF;border:2px solid #A9BCFF;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:16px;"><div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:24px;line-height:32px;font-weight:700;">v6.0 · 홈 · 조건 확인 · 추천 화면 개선</div><div style="font-size:16px;line-height:24px;color:#5B6B81;">홈에 예시·이전 회의 재사용·작성 중 이어하기를 더하고, 조건 확인 카드를 컴팩트하게 줄였어요. 추천 카드는 상태 칩과 근거 바텀시트로 정리했어요.</div></div><div style="display:grid;grid-template-columns:170px minmax(0,1fr);font-size:14px;line-height:21px;border:1px solid #E2E8F0;border-radius:16px;overflow:hidden;"><div style="padding:12px;background:#F5F7FB;font-weight:600;">화면</div><div style="padding:12px;background:#F5F7FB;font-weight:600;">정리한 내용</div><div style="padding:12px;border-top:1px solid #E2E8F0;">홈 (24~26)</div><div style="padding:12px;border-top:1px solid #E2E8F0;">입력창은 하단 한 곳, 예시를 누르면 입력창에 채움 · ‘이전 회의로 새 일정 잡기’는 이전 회의가 있을 때만 · 이전 회의를 고르면 원본은 두고 새 초안 생성 · 날짜·시간대·참석 가능 여부는 새로 확인 · ‘작성 중’ 카드는 저장된 초안이 있을 때만</div><div style="padding:12px;border-top:1px solid #E2E8F0;">조건 확인</div><div style="padding:12px;border-top:1px solid #E2E8F0;">제목 · 날짜/시간 2열 블록 · 방식 · 참석자 순 · 주요 CTA ‘참석자 선택하기’(미정이 있으면 ‘조건 수정하기’) · 보조 버튼 ‘직접 입력’을 누르면 입력창이 열림 · 요청한 참석자 조건과 실제 선택은 분리</div><div style="padding:12px;border-top:1px solid #E2E8F0;">추천 시간</div><div style="padding:12px;border-top:1px solid #E2E8F0;">추천 카드 · 상태 칩(텍스트만) · 추천 이유 바텀시트 · 세로형 후보 비교 · 선택 후 ‘이 시간으로 계속’</div><div style="padding:12px;border-top:1px solid #E2E8F0;">공통</div><div style="padding:12px;border-top:1px solid #E2E8F0;">챗 헤더 NODI 로고 · 한 줄 그라데이션 진행 바 · 글자 스케일 13·14·16·18·24·28 · 간격 4px 격자</div></div></div>
+      <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:16px;"><div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:22px;line-height:30px;font-weight:600;">v5.2 · 토스 레퍼런스로 디자인 품질 개선</div><div style="font-size:16px;line-height:24px;color:#5B6B81;">유아이볼의 토스 화면에서 ‘특징’만 가져왔어요(토스 로고·아이콘·에셋·화면 구성은 쓰지 않음). 3D 일러스트는 NODI 블루로 새로 그린 오리지널 SVG예요.</div></div><div style="display:flex;gap:16px;align-items:flex-end;padding:8px 0;"><img src="assets/nodi-3d-calendar.svg" alt="저장 완료 일러스트" width="96" height="96"><img src="assets/nodi-3d-clock.svg" alt="재조율 일러스트" width="96" height="96"><img src="assets/nodi-3d-calendar-empty.svg" alt="빈 상태 일러스트" width="96" height="96"></div><div style="display:grid;grid-template-columns:150px minmax(0,1fr);font-size:14px;line-height:21px;border:1px solid #E2E8F0;border-radius:16px;overflow:hidden;"><div style="padding:12px;background:#F5F7FB;font-weight:600;">가져온 특징</div><div style="padding:12px;background:#F5F7FB;font-weight:600;">NODI 적용</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">완료 순간의 입체 오브젝트</div><div style="padding:12px;border-top:1px solid #E2E8F0;">08 완료: 3D 달력 + 체크(132px, 한 번만 떠오르는 등장 모션) · 11 재조율 모달: 3D 시계 · 내 회의 빈 상태·추천 없음: 회색 3D 달력</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">핵심 숫자를 제목 안에서 강조</div><div style="padding:12px;border-top:1px solid #E2E8F0;">08 ‘<b style="color:#3654D4">11월 24일 오후 2:00</b> 회의가 저장됐어요’ · 05 ‘<b style="color:#3654D4">2/3명</b> 응답 완료’ · 06 ‘추천 후보 <b style="color:#3654D4">3개</b>를 찾았어요’</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">굵고 큰 질문형 헤드라인</div><div style="padding:12px;border-top:1px solid #E2E8F0;">주요 화면 제목 24–26px Bold, 모달 제목 가운데 정렬</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">섹션 제목의 분명한 위계</div><div style="padding:12px;border-top:1px solid #E2E8F0;">작은 회색 라벨(14px) → 진한 섹션 제목(17px Semibold, Navy)</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">절제된 장식</div><div style="padding:12px;border-top:1px solid #E2E8F0;">3D는 완료·재조율·빈 상태의 순간에만, 나머지 화면은 지금처럼 차분하게</div></div></div>
 
       <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:16px;"><div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:22px;line-height:30px;font-weight:600;">v5.1 · 회의 조건 추출 AI 규칙</div><div style="font-size:16px;line-height:24px;color:#5B6B81;">시안의 추출기는 규칙 기반 데모예요(실제 LLM 호출 아님). 시스템 프롬프트의 규칙을 같은 동작으로 흉내 내도록 맞췄고, 프롬프트에 정의되지 않은 JSON 스키마는 아래처럼 제안해요.</div></div><div style="display:grid;grid-template-columns:170px minmax(0,1fr);font-size:14px;line-height:21px;border:1px solid #E2E8F0;border-radius:16px;overflow:hidden;"><div style="padding:12px;background:#F5F7FB;font-weight:600;">상태</div><div style="padding:12px;background:#F5F7FB;font-weight:600;">시안 동작</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">ready</div><div style="padding:12px;border-top:1px solid #E2E8F0;">날짜(또는 ‘날짜 직접 선택’)와 회의 길이가 모두 있고 모호한 값이 없음 → 조건 확인 카드. 저장은 하지 않음(규칙 14)</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">needs_clarification</div><div style="padding:12px;border-top:1px solid #E2E8F0;">빠지거나 모호한 항목 중 가장 중요한 것 하나만 질문: 모호한 날짜 → 날짜 → 모호한 시간대 → 길이. 선택지 2–3개 + ‘직접 입력’ 항상 유지, 이미 파악한 조건은 다시 묻지 않고 ‘…(으)로 이해했어요’로 먼저 알려줌</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">unsupported</div><div style="padding:12px;border-top:1px solid #E2E8F0;">회의 취소·알림 발송·캘린더 등록 같은 요청 → 지원 범위를 설명하고 회의 종류 선택지로 복구</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">failed</div><div style="padding:12px;border-top:1px solid #E2E8F0;">해석 가능한 조건이 없음 → 오류 설명 + 진행 중이던 질문(없으면 회의 종류) 선택지로 복구</div></div><div style="display:grid;grid-template-columns:170px minmax(0,1fr);font-size:14px;line-height:21px;border:1px solid #E2E8F0;border-radius:16px;overflow:hidden;"><div style="padding:12px;background:#F5F7FB;font-weight:600;">규칙</div><div style="padding:12px;background:#F5F7FB;font-weight:600;">시안 반영</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">상대 날짜</div><div style="padding:12px;border-top:1px solid #E2E8F0;">오늘 11월 16일 (월), Asia/Seoul 기준: 내일=11/17, 모레=11/18, 이번 주=11/17–20, 다음 주=11/23–27, ‘이번 금요일’=11/20</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">모호한 표현</div><div style="padding:12px;border-top:1px solid #E2E8F0;">‘다음 주 초/말’, ‘오후쯤’, ‘적당한 시간’, ‘아무 때나’는 확정하지 않고 ambiguous로 두고 질문</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">참석자</div><div style="padding:12px;border-top:1px solid #E2E8F0;">‘디자인팀 3명’은 힌트로만 저장, 실제 사람은 참석자 선택 단계에서 사용자가 고름</div><div style="padding:12px;border-top:1px solid #E2E8F0;font-weight:600;">만들지 않는 값</div><div style="padding:12px;border-top:1px solid #E2E8F0;">입력에 없는 제목·날짜·참석자는 null. 캘린더 상태·참석 가능 여부는 추출 단계에서 다루지 않음</div></div><pre style="margin:0;padding:16px;background:#F5F7FB;border-radius:12px;font-size:13px;line-height:20px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#18243A;">{
   "status": "ready | needs_clarification | unsupported | failed",
@@ -957,7 +996,7 @@ body{font-variant-numeric:tabular-nums}
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":11000},"view":{"editor":"enum","options":["page","phone"],"default":"page","tsType":"string","section":"보기"},"initialScreen":{"editor":"enum","options":["splash","chat","conds","edit","sheetPick","sheetReq","aiFail","sheetNone","sheetZero","progress","recLoad","recErr","recNone","recs","review","done","meetings","detail","reschedAsk","resched","reschedEmpty","rsReview","inbox","request","stale"],"default":"splash","tsType":"string","section":"보기"},"newUser":{"editor":"boolean","default":false,"tsType":"boolean","section":"데이터 시나리오"},"calendarConnected":{"editor":"boolean","default":false,"tsType":"boolean","section":"연동 시나리오"},"calendarResult":{"editor":"enum","options":["success","fail"],"default":"success","tsType":"string","section":"연동 시나리오"},"inviteResult":{"editor":"enum","options":["success","partial","fail"],"default":"partial","tsType":"string","section":"연동 시나리오"},"confirmScenario":{"editor":"enum","options":["success","changed","conflict","network"],"default":"success","tsType":"string","section":"확정·응답 시나리오"},"submitScenario":{"editor":"enum","options":["success","unclear","offline"],"default":"success","tsType":"string","section":"확정·응답 시나리오"},"reschedResult":{"editor":"enum","options":["success","fail"],"default":"success","tsType":"string","section":"확정·응답 시나리오"},"recalcFail":{"editor":"boolean","default":false,"tsType":"boolean","section":"확정·응답 시나리오"},"skipSplash":{"editor":"boolean","default":false,"tsType":"boolean","section":"기타"}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":11000},"view":{"editor":"enum","options":["page","phone"],"default":"page","tsType":"string","section":"보기"},"initialScreen":{"editor":"enum","options":["splash","chat","conds","edit","sheetPick","sheetReq","aiFail","sheetNone","sheetZero","reuseSheet","reuseCard","progress","recLoad","recErr","recNone","recs","review","done","meetings","detail","reschedAsk","resched","reschedEmpty","rsReview","inbox","request","stale"],"default":"splash","tsType":"string","section":"보기"},"noDraft":{"editor":"boolean","default":false,"tsType":"boolean","section":"데이터 시나리오"},"newUser":{"editor":"boolean","default":false,"tsType":"boolean","section":"데이터 시나리오"},"calendarConnected":{"editor":"boolean","default":false,"tsType":"boolean","section":"연동 시나리오"},"calendarResult":{"editor":"enum","options":["success","fail"],"default":"success","tsType":"string","section":"연동 시나리오"},"inviteResult":{"editor":"enum","options":["success","partial","fail"],"default":"partial","tsType":"string","section":"연동 시나리오"},"confirmScenario":{"editor":"enum","options":["success","changed","conflict","network"],"default":"success","tsType":"string","section":"확정·응답 시나리오"},"submitScenario":{"editor":"enum","options":["success","unclear","offline"],"default":"success","tsType":"string","section":"확정·응답 시나리오"},"reschedResult":{"editor":"enum","options":["success","fail"],"default":"success","tsType":"string","section":"확정·응답 시나리오"},"recalcFail":{"editor":"boolean","default":false,"tsType":"boolean","section":"확정·응답 시나리오"},"skipSplash":{"editor":"boolean","default":false,"tsType":"boolean","section":"기타"}}'>
 // ---- Lucide icons (outline) ----
 const L={
  back:[['path',{d:'m15 18-6-6 6-6'}]],next:[['path',{d:'m9 18 6-6-6-6'}]],down:[['path',{d:'m6 9 6 6 6-6'}]],
@@ -995,6 +1034,9 @@ const L={
 function ic(n,s,c,sw,spin){return React.createElement('svg',{width:s||20,height:s||20,viewBox:'0 0 24 24',fill:'none',stroke:c||'currentColor',strokeWidth:sw||1.5,strokeLinecap:'round',strokeLinejoin:'round','aria-hidden':true,focusable:'false',style:{flexShrink:0,animation:spin?'nodiSpin 1s linear infinite':undefined}},L[n].map(([t,a],i)=>React.createElement(t,{key:i,...a})))}
 
 const ME='me';
+const HOME_EG='다음 주 화요일 오후에 디자인팀 리뷰 미팅 잡아줘';
+function durOf(t){const m=(t||'').match(/(오전|오후) (\d+):(\d+) – (?:(오전|오후) )?(\d+):(\d+)/);if(!m)return 60;const h=(ap,x)=>(+x%12)+(ap==='오후'?12:0);return Math.max(15,(h(m[4]||m[1],m[5])*60+ +m[6])-(h(m[1],m[2])*60+ +m[3]))}
+function stepOfState(s){const c=s.conds;if(s.screen==='progress')return 2;if(s.screen==='recs')return 3;if(s.screen==='review')return 4;if(s.attendeesDone)return 2;if(s.sheet==='att')return 1;return c&&c.confirmed?1:0}
 const TODAY='11월 16일 (월)',TODAY_TS=320;
 const DAYS=[[17,'화'],[18,'수'],[19,'목'],[20,'금'],[23,'월'],[24,'화'],[25,'수'],[26,'목'],[27,'금']].map(([d,w])=>({label:`11월 ${d}일 (${w})`,short:`${d}일(${w})`,day:d,wd:w,week:d<23?0:1}));
 const HOURS=[9,10,11,13,14,15,16,17];
@@ -1082,15 +1124,24 @@ const STEPS=['조건 확인','참석자·일정 필수','조율 현황','추천 
 const BLANK={screen:'chat',tab:'new',input:'',conds:null,selected:[],required:{},policy:'req',attendeesDone:false,
   sheet:null,sheetStep:'pick',sheetFilter:'전체',sheetSearch:'',draftSel:[],draftReq:{},draftPolicy:'req',draftKept:false,draft:null,
   recs:null,recState:'idle',invalidated:false,pick:null,recView:'card',showCriteria:false,changed:null,
-  invite:true,calSync:true,confirming:false,cphase:null,confirmErr:null,changeNotice:null,conflict:null,done:null,kb:false,newMsg:false,remind:null,recheckSent:null};
+  speakEdit:false,reuseOpen:false,reuseQ:'',invite:true,calSync:true,confirming:false,cphase:null,confirmErr:null,changeNotice:null,conflict:null,done:null,kb:false,newMsg:false,remind:null,recheckSent:null};
 
 class Component extends DCLogic {
   state={...BLANK,screen:'splash',msgs:initMsgs(),meetings:SEED_MEET,detailId:null,detailFrom:'meetings',mtab:'예정',requests:SEED_REQ,reqId:null,reqDraft:{},reqMemo:'',subState:null,toast:null,notif:true,prevScreen:'chat',reschedAsk:false,titleDraft:null,rs:{pick:null,phase:null,err:false,reqSent:{}}};
   chatRef=React.createRef();dlgRef=React.createRef();trigRef=React.createRef();
   n=0;atBottom=true;forceScroll=false;
   id(){return 'x'+(++this.n)}
+  seedDraft(){const c={type:'디자인 리뷰',duration:60,days:[5,5],prefDay:null,rel:'다음 주 화요일',timePref:'오후',mode:'온라인',team:'디자인팀',count:3,requiredName:null,src:{type:'ai',duration:'ai',days:'ai',timePref:'ai'},confirmed:true,ver:1};
+    return{id:'d1',title:'디자인 리뷰',screen:'chat',sheet:'att',attendeesDone:false,step:1,conds:c,selected:[],required:{},policy:'req',msgs:[initMsgs()[0],{id:'sd1',kind:'user',text:SUGG[0]},{id:'sd2',kind:'ai',text:'말씀하신 내용을 회의 조건으로 정리했어요. 맞는지 확인해 주세요.'},{id:'sd3',kind:'conds',snap:c}]}}
+  resumeDraft=()=>{const d=this.state.draftSave;if(!d)return;this.anchorId=null;this.forceScroll=true;
+    this.setState({screen:d.screen==='chat'?'chat':d.screen,tab:'new',conds:d.conds,msgs:d.msgs,selected:[...d.selected],required:{...d.required},policy:d.policy,attendeesDone:d.attendeesDone,guide:null,sheet:null,recs:null,pick:null,invalidated:false,reuseOpen:false},()=>{if(d.sheet==='att')this.openSheet()})};
+  applyReuse=(m)=>{const ids=m.people.filter(id=>P[id]),req={};ids.forEach(id=>{if(m.required&&m.required[id])req[id]=true});
+    const c={type:m.title,duration:durOf(m.time),days:null,prefDay:null,rel:null,timePref:null,mode:'온라인',team:null,count:null,requiredName:null,src:{type:'pick',duration:'pick',mode:'pick'},confirmed:false,ver:1,reuse:{title:m.title,n:ids.length,id:m.id}};
+    const aiId=this.id();this.anchorId=aiId;this.forceScroll=true;
+    this.setState({reuseOpen:false,reuseQ:'',screen:'chat',tab:'new',conds:c,selected:ids,required:req,policy:'req',attendeesDone:false,sheet:null,guide:null,recs:null,pick:null,invalidated:false,
+      msgs:[initMsgs()[0],{id:this.id(),kind:'user',text:`‘${m.title}’로 새 일정 잡기`},{id:aiId,kind:'ai',text:'이전 회의 정보를 가져왔어요\n참석자와 기본 조건을 확인하고 새 날짜를 선택해 주세요.'},{id:this.id(),kind:'conds',snap:c}]})};
   t(fn,ms){(this.timers||(this.timers=[])).push(setTimeout(fn,ms))}
-  componentDidMount(){const k=this.props.initialScreen;if(k&&k!=='splash'){this.applySeed(k);return}if(this.props.skipSplash)this.setState({screen:'chat'});else this.t(()=>this.state.screen==='splash'&&this.setState({screen:'chat'}),1600)}
+  componentDidMount(){if(!this.props.noDraft)this.setState({draftSave:this.seedDraft()});const k=this.props.initialScreen;if(k&&k!=='splash'){this.applySeed(k);return}if(this.props.skipSplash)this.setState({screen:'chat'});else this.t(()=>this.state.screen==='splash'&&this.setState({screen:'chat'}),1600)}
   applySeed(k){
     const c={type:'디자인 리뷰',duration:60,days:[5,5],prefDay:null,rel:'다음 주 화요일',timePref:'오후',mode:'온라인',team:'디자인팀',count:3,requiredName:null,src:{type:'ai',duration:'ai',days:'ai',timePref:'ai'},confirmed:false,ver:1};
     const m0=[initMsgs()[0],{id:'s1',kind:'user',text:SUGG[0]},{id:'s2',kind:'ai',text:'말씀하신 내용을 회의 조건으로 정리했어요. 맞는지 확인해 주세요.'},{id:'s3',kind:'conds',snap:c}];
@@ -1102,17 +1153,20 @@ class Component extends DCLogic {
       edit:{screen:'chat',conds:c,msgs:m0,sheet:'edit',draft:{type:c.type,duration:60,days:[5,5],prefDay:null,timePref:'오후',mode2:'온라인',mode:'day',anchor:null,week:1,cal:false}},
       progress:{screen:'progress',...flow},recs:{screen:'recs',...flow},review:{screen:'review',...flow},
       aiFail:{screen:'chat',msgs:[initMsgs()[0],{id:'f1',kind:'user',text:'음 그냥 적당히 잡아줘'},{id:'f2',kind:'ai',text:'말씀을 회의 조건으로 정리하지 못했어요. 아래에서 고르거나 날짜·길이·회의 종류 중 하나만 알려주세요.'},{id:'f3',kind:'choice',step:'type'}]},
+      reuseCard:{screen:'chat'},
       sheetNone:{screen:'chat',conds:ok,msgs:m0,sheet:'att',sheetStep:'pick',draftSel:[],draftReq:{},sheetSearch:'장하늘'},
       sheetZero:{screen:'chat',conds:ok,msgs:m0,sheet:'att',sheetStep:'pick',draftSel:[],draftReq:{}},
       recLoad:{screen:'recs',...flow,recState:'loading',recs:null,invalidated:true},
       recErr:{screen:'recs',...flow,recState:'error',recs:null,invalidated:true},
       recNone:{screen:'recs',...flow,conds:{...flow.conds,days:[2,2],rel:'11월 19일 (목)'}},
       reschedEmpty:{screen:'resched',tab:'meetings',detailId:'m1',meetings:rsM,rsNone:true},
+      reuseSheet:{screen:'chat',reuseOpen:true},
       done:{screen:'done',...flow},meetings:{screen:'meetings',tab:'meetings',...flow},detail:{screen:'detail',tab:'meetings',detailId:'m1'},
       reschedAsk:{screen:'detail',tab:'meetings',detailId:'m1',reschedAsk:true},resched:{screen:'resched',tab:'meetings',detailId:'m1',meetings:rsM},
       rsReview:{screen:'rsReview',tab:'meetings',detailId:'m1',meetings:rsM,rs:{pick:'c1',phase:null,err:false,reqSent:{}}},
       inbox:{screen:'inbox',tab:'inbox'},request:{screen:'request',tab:'inbox',reqId:'r1',reqDraft:{a:'yes',b:'maybe'},reqMemo:''},stale:{screen:'request',tab:'inbox',reqId:'r4',reqDraft:{a:'yes'}}};
     this.setState(S[k]||S.chat,()=>{
+      if(k==='reuseCard'){this.applyReuse(this.state.meetings.find(x=>x.id==='m3'));return}
       if(k==='done'||k==='meetings'){const recs={key:this.recKey(),...this.computeRecs()},f=recs.list[0],c2=this.state.conds,d=DAYS[f.d],ids=this.state.selected;
         const m={id:'mflow',title:c2.type,date:d.label,time:fmtRange(f.h,c2.duration),day:String(d.day),wd:d.wd,ts:304+d.day,d:f.d,h:f.h,people:[...ids],required:{...this.state.required},accepted:{},status:'confirmed',tasks:{cal:'none',notify:Object.fromEntries(ids.map((id,i)=>[id,i===ids.length-1?{st:'fail',at:'오늘 오전 9:41',err:'수신 주소를 확인하지 못함 (데모 오류)'}:{st:'sent',at:'오늘 오전 9:41'}]))},history:['11월 16일 · 회의를 만들었어요',`11월 16일 · ${d.label} ${fmt(f.h*60)}으로 확정했어요`,'11월 16일 · 데모 알림 일부 처리 실패']};
         this.setState(x=>({recs,recState:'ready',pick:{d:f.d,h:f.h},meetings:[m,...x.meetings],done:{mid:'mflow'}}));return}
@@ -1134,6 +1188,9 @@ class Component extends DCLogic {
       else if(entered||kbChanged||this.forceScroll||(msgsChanged&&this.atBottom)){this.forceScroll=false;requestAnimationFrame(()=>{el.scrollTop=el.scrollHeight;this.atBottom=true});if(s.newMsg)this.setState({newMsg:false})}
       else if(msgsChanged&&!this.atBottom&&!s.newMsg)this.setState({newMsg:true});
     }
+    if(s.screen==='done'&&s.draftSave){this.draftKey=null;this.setState({draftSave:null})}
+    else if(s.conds&&['chat','progress','recs','review'].includes(s.screen)){const key=JSON.stringify([s.screen,s.sheet,s.conds,s.selected,s.required,s.policy,s.attendeesDone]);
+      if(key!==this.draftKey){this.draftKey=key;this.setState({draftSave:{id:(s.draftSave&&s.draftSave.id)||'d'+this.id(),title:s.conds.type||'새 회의',screen:s.screen,sheet:s.sheet==='att'?'att':null,attendeesDone:s.attendeesDone,step:stepOfState(s),conds:s.conds,selected:[...s.selected],required:{...s.required},policy:s.policy,msgs:s.msgs.filter(m=>m.kind!=='typing')}})}}
     if(s.screen==='recs'&&s.recState!=='loading'&&s.recState!=='error'&&!this.recsValid())this.startRecalc();
     if(!ps.reschedAsk&&s.reschedAsk)requestAnimationFrame(()=>this.dlgRef.current&&this.dlgRef.current.focus());
     if(ps.reschedAsk&&!s.reschedAsk&&s.screen==='detail')requestAnimationFrame(()=>this.trigRef.current&&this.trigRef.current.focus());
@@ -1173,7 +1230,7 @@ class Component extends DCLogic {
   send=(arg)=>{
     const text=(typeof arg==='string'?arg:this.state.input).trim();
     if(!text||this.busy)return;this.busy=true;this.forceScroll=true;const uid=this.id();this.anchorId=uid;
-    this.setState(s=>({input:'',msgs:[...s.msgs.filter(m=>m.kind!=='chips'&&m.kind!=='choice'),{id:uid,kind:'user',text},{id:'typing',kind:'typing'}]}));
+    this.setState(s=>({speakEdit:false,input:'',msgs:[...s.msgs.filter(m=>m.kind!=='chips'&&m.kind!=='choice'),{id:uid,kind:'user',text},{id:'typing',kind:'typing'}]}));
     this.t(()=>{this.busy=false;this.respond(text)},900);
   };
   respond(text){
@@ -1189,20 +1246,20 @@ class Component extends DCLogic {
       const g={...g0,...found,amb,src};
       return this.askNext(g,this.knownLine(found));
     }
-    const c={...s.conds,src:{...s.conds.src}},ch=[];
-    if(p.duration&&p.duration!==c.duration){c.duration=p.duration;c.src.duration='user';ch.push(`회의 길이를 ${p.duration}분으로`)}
-    if(p.timePref&&p.timePref!==c.timePref){c.timePref=p.timePref;c.src.timePref='user';ch.push(`선호 시간대를 ${PREF_RO[p.timePref]}`)}
-    if(p.days&&String(p.days)!==String(c.days)){c.days=p.days;c.prefDay=null;c.rel=p.rel;c.src.days='user';ch.push(`날짜를 ${rangeText(p.days)}(으)로`)}
-    if(p.mode&&p.mode!==c.mode){c.mode=p.mode;c.src.mode='user';ch.push(`참석 방식을 ${p.mode}(으)로`)}
-    if(p.type&&p.type!==c.type){c.type=p.type;c.src.type='user';ch.push(`회의 제목을 ${p.type}(으)로`)}
-    if(!ch.length){this.push([{kind:'ai',text:'어떤 조건을 바꿀까요? “30분으로 바꿔줘”, “대면으로 바꿔줘”, “다음 주 중으로”처럼 말씀해 주세요.'}]);return}
+    const c={...s.conds,src:{...s.conds.src}},ch=[],p=pp;
+    if(p.duration&&p.duration!==c.duration){const o0=c.duration;c.duration=p.duration;c.src.duration='user';ch.push(o0?`회의 길이를 ${o0}분에서 ${p.duration}분으로`:`회의 길이를 ${p.duration}분으로`)}
+    if(p.timePref&&p.timePref!==c.timePref){const o0=c.timePref||'상관없음';c.timePref=p.timePref;c.src.timePref='user';ch.push(`선호 시간대를 ${o0}에서 ${PREF_RO[p.timePref]}`)}
+    if(p.days&&String(p.days)!==String(c.days)){const o0=c.days;c.days=p.days;c.prefDay=null;c.rel=p.rel;c.src.days='user';ch.push(o0?`날짜를 ${rangeText(o0)}에서 ${rangeText(p.days)}(으)로`:`날짜를 ${rangeText(p.days)}(으)로`)}
+    if(p.mode&&p.mode!==c.mode){const o0=c.mode||'온라인';c.mode=p.mode;c.src.mode='user';ch.push(`참석 방식을 ${o0}에서 ${p.mode}(으)로`)}
+    if(p.type&&p.type!==c.type){const o0=c.type;c.type=p.type;c.src.type='user';ch.push(o0?`회의 제목을 ‘${o0}’에서 ‘${p.type}’(으)로`:`회의 제목을 ‘${p.type}’(으)로`)}
+    if(!ch.length){this.push([{kind:'ai',text:'변경 내용을 정확히 이해하지 못했어요. 다시 입력하거나 항목을 직접 수정해 주세요.'}]);return}
     this.applyConds(c,ch);
   }
   applyConds(c,ch){
     const s=this.state,had=!!s.recs||s.pick!=null;
     c={...c,ver:(s.conds.ver||1)+1};
     const before=recheckIds(s.conds).filter(id=>s.selected.includes(id)).length,after=recheckIds(c).filter(id=>s.selected.includes(id)).length;
-    let text=ch.join(', ')+' 바꿨어요. 다른 조건은 그대로예요.';
+    let text=ch.map(x=>x+' 변경했어요.').join('\n');
     if(after>before)text+=`\n이 변경으로 제출된 응답 ${after}건은 재확인이 필요해요. 응답은 기록으로 보관하고, 재확인 전까지 가능으로 계산하지 않아요.`;
     if(had)text+='\n이전 추천은 더 이상 유효하지 않아요. 최신 조건으로 다시 계산할게요.';
     this.push([{kind:'ai',text},{kind:'conds',snap:c}],{conds:c,pick:null,invalidated:had,recheckSent:null});
@@ -1387,12 +1444,33 @@ class Component extends DCLogic {
     const personRow=id=>{const p=P[id],sb=SUB_L[subOf(id)],[ab,af]=av(id);
       const line=subOf(id)==='submitted'?(p.yes.length||p.maybe.length?`가능 ${p.yes.length}개 시간대${p.maybe.length?` · 조정하면 가능 ${p.maybe.length}개`:''}`:'모든 후보 불가로 응답'):subOf(id)==='recheck'?'조건 변경 전 응답 · 기록으로 보관 중':p.cal==='free'?'응답 전 · 캘린더 바쁨/한가함만 참고':'응답 전 · 참고할 캘린더 정보 없음';
       return{label:label(p)+(s.required[id]&&s.policy==='req'?' · 일정 필수':''),initials:p.name.slice(1,3),avBg:ab,avFg:af,subL:sb[0],subBg:b(sb[1])[0],subFg:b(sb[1])[1],calL:CAL_L[p.cal],line,hasMemo:!!p.memo&&subOf(id)==='submitted',memo:p.memo||''}};
+    const isHome=scr==='chat'&&!s.conds&&!s.guide&&s.msgs.length>0&&s.msgs.every(m=>m.kind==='ai'||m.kind==='choice');
+    const reusable=s.meetings.filter(m=>['past','confirmed'].includes(m.status)&&m.title!=='새 회의'&&m.people&&m.people.length&&m.tasks!==undefined).sort((a,b2)=>b2.ts-a.ts);
+    const rq0=(s.reuseQ||'').trim(),reuseList=reusable.filter(m=>!rq0||m.title.includes(rq0)).map(m=>({id:m.id,title:m.title,sub:`참석자 ${m.people.length}명 · ${durOf(m.time)}분 · 온라인`,when:m.date?m.date.replace(/ \(.\)/,''):'',onPick:()=>this.applyReuse(m)}));
+    const dsv=s.draftSave;
     const msgs=s.msgs.map((m,i)=>{
       const o={id:m.id,text:m.text,isUser:m.kind==='user',isAi:m.kind==='ai',isTyping:m.kind==='typing',isChips:m.kind==='chips',isChoice:m.kind==='choice',opts:m.kind==='choice'?((m.step==='whenAmb'&&m.amb&&/이번/.test(m.amb.days||''))?[{l:'이번 주 화–수',set:{days:[0,1],rel:'이번 주 화–수'}},{l:'이번 주 전체',set:{days:[0,3],rel:'이번 주'}},GUIDE.whenAmb[2],GUIDE.whenAmb[3]]:(GUIDE[m.step]||[])).map(x=>({label:x.l,onClick:()=>this.pickGuide(m.step,x)})):[],isConds:m.kind==='conds',isProg:m.kind==='prog'};
       if(o.isConds){const live=m===lastConds,cc=live?c:m.snap,ok=!!(cc.duration&&cc.days),rows=condRows(cc);
-        const badge=!live?'이전 조건':!ok?'미정 항목 있음':cc.confirmed?'확인 완료':'확인 전',bk=!live?'neutral':!ok?'warning':cc.confirmed?'success':'info';
+        const badge=!live?'이전 조건':!ok?'미정 항목 있음':cc.confirmed?'확인 완료':'AI 정리 완료',bk=!live?'neutral':!ok?'warning':cc.confirmed?'success':'info';
+        const tg=r=>r.hasTag?{has:true,label:r.tag,bg:r.tagBg,fg:r.tagFg}:{has:false,label:'',bg:'',fg:''};
+        const cmp=i=>DAYS[i].label.replace(' (','('),dRng=cc.days&&isRange(cc.days);
+        const dateVal=cc.days?(dRng?`${cmp(cc.days[0])} – ${DAYS[cc.days[1]].short}`:cmp(cc.days[0])):'미정';
+        const dateSub=!cc.days?'날짜를 정해 주세요':dRng?`평일 ${rangeCount(cc.days)}일 중에서 찾아요${cc.prefDay!=null?` · 선호 ${DAYS[cc.prefDay].short}`:''}`:'하루';
+        const timeVal=`${cc.timePref||'상관없음'} · ${cc.duration?cc.duration+'분':'미정'}`,timeSub=cc.duration?'선호 시간대':'회의 길이를 정해 주세요';
+        const extra=rows.slice(6),attRow=rows[5],noTag={has:false,label:'',bg:'',fg:''};
+        const attVal=s.attendeesDone?attRow.value:cc.reuse?`이전 참석자 ${cc.reuse.n}명`:([cc.team,cc.count?cc.count+'명':''].filter(Boolean).join(' ')||'참석자 미지정');
+        const attHas=!s.attendeesDone&&(cc.reuse||attVal!=='참석자 미지정'),attBadgeText=cc.reuse?'재확인 필요':'참석자 미지정';
+        const miss=[!cc.days&&'날짜를',!cc.duration&&'회의 길이를'].filter(Boolean).join(' ').replace('날짜를 회의 길이를','날짜와 회의 길이를');
+        Object.assign(o,{cTitle:rows[0].value,cTitleSub:rows[0].sub,cTitleTag:tg(rows[0]),cTitleEdit:live?rows[0].onEdit:()=>{},
+          cDate:dateVal,cDateSub:dateSub,cDateTag:tg(rows[2]),cDateEdit:live?rows[2].onEdit:()=>{},
+          cTime:timeVal,cTimeSub:timeSub,cTimeTag:rows[1].hasTag?tg(rows[1]):tg(rows[3]),cTimeEdit:live?rows[1].onEdit:()=>{},
+          cMode:`${rows[4].value} 회의`,cModeTag:tg(rows[4]),cModeEdit:live?rows[4].onEdit:()=>{},
+          cAtt:attVal,cAttBadge:attHas,cAttBadgeText:attBadgeText,cAttSub:s.attendeesDone?'':cc.reuse?'참석 가능 여부는 다음 단계에서 새로 확인해요':'다음 단계에서 직접 선택해요',cAttTag:s.attendeesDone?tg(attRow):noTag,cAttEdit:live?attRow.onEdit:()=>{},
+          cExtra:extra.map(r=>({label:r.label,value:r.value,tag:tg(r),onEdit:live?r.onEdit:()=>{}})),
+          iconPencil:ic('pencil',18,'#5B6B81',1.75),iconCal:ic('calendar',16,'#5B6B81',1.75),iconClock:ic('clock',16,'#5B6B81',1.75),
+          onSpeak:()=>{this.setState({speakEdit:true,kb:true});requestAnimationFrame(()=>{const el=document.getElementById('nodi-chat-input');if(el)el.focus()})}});
         Object.assign(o,{rows:rows.map(r=>({...r,canEdit:live,noEdit:!live,onEdit:live?r.onEdit:()=>{}})),hasAiNote:live&&rows.some(r=>r.isAi),showEditBtn:ok,hasAsk:!ok||s.attendeesDone,live,cardOpacity:live?1:0.6,badge,badgeBg:b(bk)[0],badgeFg:b(bk)[1],
-          ask:!ok?'회의 길이와 날짜를 정해 주세요. 나머지는 나중에 추가할 수 있어요.':s.attendeesDone?'조건을 바꾸면 추천을 다시 계산해요.':'',
+          ask:!ok?(miss+' 정해 주세요. 나머지는 나중에 추가할 수 있어요.'):s.attendeesDone?'조건을 바꾸면 추천을 다시 계산해요.':'',
           askBg:ok?'#F5F7FB':'#FFF3DC',askColor:ok?'#18243A':'#925500',
           nextLabel:!ok?'조건 수정하기':s.attendeesDone?'조율 현황 보기':'참석자 선택하기',nextDisabled:false,nextBg:'#3654D4',nextFg:'#FFFFFF',
           onNext:()=>{if(!ok)return openEditFn();this.setState({conds:{...c,confirmed:true}});s.attendeesDone?this.setState({screen:'progress',kb:false}):this.openSheet()}});}
@@ -1560,7 +1638,7 @@ class Component extends DCLogic {
     const draftRc=s.draft?recheckIds({duration:dr.duration,mode:dr.mode2}).filter(id=>s.selected.length?s.selected.includes(id):true).length:0;
     const curRc=recheckIds(c).filter(id=>s.selected.length?s.selected.includes(id):true).length;
     const kbRows=[...KB.map(r=>({keys:r.map(l=>({l,w:l==='⇧'||l==='⌫'?42:31}))})),{keys:[{l:'123',w:84},{l:'간격',w:180},{l:'완료',w:84}]}];
-    const composerBottom=s.kb?291:(s.screen==='chat'&&((!!s.conds&&!s.conds.confirmed)||(!!s.guide&&!s.conds)))?24:96,chatBottom=composerBottom+72;
+    const hideComposer=s.screen==='chat'&&!!s.conds&&!s.conds.confirmed&&!s.speakEdit&&!s.kb,composerBottom=s.kb?291:(s.screen==='chat'&&((!!s.conds&&!s.conds.confirmed)||(!!s.guide&&!s.conds)))?24:96,chatBottom=hideComposer?24:composerBottom+72;
     const sw=on=>[on?'#3654D4':'#A3B0C2',on?'flex-end':'flex-start'];
     // 상단 바
     const TOP={progress:'조율 진행 현황',recs:'추천 회의 시간',review:'최종 검토',detail:'회의 상세',resched:'새 시간 조율',rsReview:'변경 내용 검토',request:'참석 가능 시간 응답',settings:'설정'};
@@ -1578,10 +1656,10 @@ class Component extends DCLogic {
       stepVal,stepPct,stepNow,stepNext,
       onSkipSplash:()=>this.setState({screen:'chat'}),onReplaySplash:()=>{this.setState({screen:'splash'});this.t(()=>this.state.screen==='splash'&&this.setState({screen:'chat',tab:'new'}),1600)},
       onReset:this.reset,onSettings:()=>this.setState({prevScreen:scr,screen:'settings',kb:false}),
-      chatRef:this.chatRef,dlgRef:this.dlgRef,trigRef:this.trigRef,msgs,suggestions:SUGG.map(t=>({text:t,onClick:()=>this.send(t)})),
+      chatRef:this.chatRef,dlgRef:this.dlgRef,trigRef:this.trigRef,msgs:isHome?[]:msgs,isHome,notHome:!isHome,homeEg:HOME_EG,onEg:()=>{this.setState({input:HOME_EG,kb:true});requestAnimationFrame(()=>{const el=document.getElementById('nodi-chat-input');if(el)el.focus()})},homeChips:((msgs.find(x=>x.isChoice)||{opts:[]}).opts||[]).filter(o=>o.label!=='직접 입력'&&o.label!=='다른 회의 직접 입력').slice(0,3),hasReuse:isHome&&!this.props.newUser&&reusable.length>0,onOpenReuse:()=>this.setState({reuseOpen:true,reuseQ:''}),hasDraft:isHome&&!!dsv,draftTitle:dsv?dsv.title:'',draftStep:dsv?`${STEPS[dsv.step]} · ${dsv.step+1}/5`:'',onResume:this.resumeDraft,showReuse:s.reuseOpen&&scr==='chat',reuseList,reuseEmpty:!reuseList.length,reuseNoData:!reusable.length,reuseQ:s.reuseQ||'',onReuseQ:e=>this.setState({reuseQ:e.target.value}),onCloseReuse:()=>this.setState({reuseOpen:false,reuseQ:''}),onReuseStop:e=>{e.stopPropagation()},iconHistory:ic('history',20,'#5B6B81',1.75),suggestions:SUGG.map(t=>({text:t,onClick:()=>this.send(t)})),
       onChatScroll:e=>{const el=e.currentTarget;this.lastTop=el.scrollTop;const ab=el.scrollHeight-el.scrollTop-el.clientHeight<48;this.atBottom=ab;if(ab&&s.newMsg)this.setState({newMsg:false})},
       showNewMsg:s.newMsg&&scr==='chat',newMsgBottom:chatBottom+8,onJumpBottom:()=>{const el=this.chatRef.current;if(el)el.scrollTop=el.scrollHeight;this.atBottom=true;this.setState({newMsg:false})},
-      composerBottom,chatBottom,composerBorder:s.kb?'2px solid #3654D4':'1px solid #E2E8F0',showKb:scr==='chat'&&s.kb,kbRows,onFocusInput:()=>{if(!s.kb)this.setState({kb:true})},onHideKb:()=>this.setState({kb:false}),
+      showComposer:!hideComposer,inputPh:s.speakEdit?'예: 회의 시간을 90분으로 바꿔줘':'회의 조건을 말씀해 주세요',composerBottom,chatBottom,composerBorder:s.kb?'2px solid #3654D4':'1px solid #E2E8F0',showKb:scr==='chat'&&s.kb,kbRows,onFocusInput:()=>{if(!s.kb)this.setState({kb:true})},onHideKb:()=>this.setState({kb:false}),
       typingDots:React.createElement('div',{style:{display:'flex',gap:4,padding:'18px 16px'}},[0,1,2].map(i=>React.createElement('span',{key:i,style:{width:7,height:7,borderRadius:4,background:'#5B6B81',animation:`nodiDot 1s ${i*0.15}s infinite ease-in-out`}}))),
       input:s.input,onInput:e=>this.setState({input:e.target.value}),onKey:e=>{if(e.key==='Enter'&&!e.nativeEvent.isComposing){e.preventDefault();this.send()}},onSend:()=>this.send(),
       sendBg:s.input.trim()?'#3654D4':'#E3E8F0',sendFg:s.input.trim()?'#FFFFFF':'#5B6B81',
@@ -1623,6 +1701,7 @@ class Component extends DCLogic {
       calView:!!dr.cal,showWeekStrip:!dr.cal,calViewBg:dr.cal?'#E9EEFF':'#FFFFFF',onToggleCalView:()=>setDr({cal:!dr.cal}),
       weekDays,calHead:['일','월','화','수','목','금','토'].map(l=>({l})),calCells,
       draftDateText:dr.days?(isRange(dr.days)?`${rangeText(dr.days)} (평일 ${rangeCount(dr.days)}일)`:`${DAYS[dr.days[0]].label} 하루`):'날짜를 선택해 주세요',
+      draftBasis:c&&c.src&&c.src.days==='ai'&&c.rel?`AI 해석 근거 · 입력 ‘${c.rel}’, 기준일 ${TODAY}`:'',
       draftDateHint:dr.anchor!=null?'하루만 찾으려면 그대로 저장하세요. 기간으로 찾으려면 끝나는 날짜를 눌러 주세요':isRange(dr.days)?'이 기간 안에서 찾아요. 다른 날짜를 누르면 새로 정해요':'이 날짜 하루 안에서만 찾아요. 두 날짜를 차례로 누르면 기간으로 찾아요',
       showPrefDay:isRange(dr.days)&&dr.anchor==null,
       prefDayOpts:dr.days&&isRange(dr.days)?this.chips([{v:null,l:'없음'},...DAYS.map((d,i)=>({v:i,l:d.short})).filter(o=>o.v>=dr.days[0]&&o.v<=dr.days[1])],dr.prefDay??null,v=>setDr({prefDay:v})):[],
@@ -1632,12 +1711,12 @@ class Component extends DCLogic {
       onResetDraft:()=>{if(!c||!draftChanged)return;setDr({type:c.type||'',duration:c.duration,days:c.days,prefDay:c.prefDay??null,timePref:c.timePref||'상관없음',mode2:c.mode||'온라인',anchor:null,mode:isRange(c.days)?'range':'day'})},
       saveDisabled:!canSave,saveBg:canSave?'#3654D4':'#E9EDF3',saveFg:canSave?'#FFFFFF':'#5B6B81',saveLabel:!draftValid?(dr.anchor!=null?'종료일을 선택해 주세요':'날짜와 길이를 정해 주세요'):'변경사항 저장',showNoChange:draftValid&&!draftChanged,undoColor:draftChanged?'#18243A':'#8593A8',
       onSaveEdit:()=>{if(!canSave)return;const nc={...c,src:{...c.src},type:dr.type.trim()||null,duration:dr.duration,days:dr.days,prefDay:dr.prefDay??null,timePref:dr.timePref,mode:dr.mode2},ch=[];
-        if(chg.type){ch.push('회의 제목을');nc.src.type='user'}
-        if(chg.duration){ch.push(`회의 길이를 ${nc.duration}분으로`);nc.src.duration='user'}
-        if(chg.days){ch.push(`날짜를 ${rangeText(nc.days)}(으)로`);nc.src.days='user';nc.rel=null}
+        if(chg.type){ch.push(`회의 제목을 ‘${nc.type||'새 회의'}’(으)로`);nc.src.type='user'}
+        if(chg.duration){ch.push(c.duration?`회의 길이를 ${c.duration}분에서 ${nc.duration}분으로`:`회의 길이를 ${nc.duration}분으로`);nc.src.duration='user'}
+        if(chg.days){ch.push(c.days?`날짜를 ${rangeText(c.days)}에서 ${rangeText(nc.days)}(으)로`:`날짜를 ${rangeText(nc.days)}(으)로`);nc.src.days='user';nc.rel=null}
         if(chg.prefDay)ch.push(nc.prefDay!=null?`선호 날짜를 ${DAYS[nc.prefDay].label}로`:'선호 날짜를 없음으로');
-        if(chg.timePref){ch.push(`선호 시간대를 ${PREF_RO[nc.timePref]}`);nc.src.timePref='user'}
-        if(chg.mode){ch.push(`참석 방식을 ${nc.mode}(으)로`);nc.src.mode='user'}
+        if(chg.timePref){ch.push(`선호 시간대를 ${c.timePref||'상관없음'}에서 ${PREF_RO[nc.timePref]}`);nc.src.timePref='user'}
+        if(chg.mode){ch.push(`참석 방식을 ${c.mode||'온라인'}에서 ${nc.mode}(으)로`);nc.src.mode='user'}
         this.setState({sheet:null,closeAsk:false});if(ch.length)this.applyConds(nc,ch);},
       // 추천
       condLine:c?[c.days?rangeText(c.days).replace(/ 하루$/,'').replace(/ \((.)\)/,'($1)'):'날짜 미정',c.timePref||'시간대 상관없음',`${c.duration||60}분`].join(' · '):'',condLine2:c?[c.mode||'온라인',`참석자 ${n}명`,reqIdsSel.length?`일정 필수 ${reqIdsSel.length}명`:'일정 필수 없음'].join(' · '):'',
