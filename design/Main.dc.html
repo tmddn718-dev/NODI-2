@@ -120,12 +120,12 @@ body{font-variant-numeric:tabular-nums}
                   <div style="margin-left:40px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:16px;opacity:{{ m.cardOpacity }};">
                     <div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;">
                       <span style="height:28px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:{{ m.badgeBg }};color:{{ m.badgeFg }};white-space:nowrap;">{{ m.badge }}</span>
-                      <div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:18px;font-weight:600;line-height:26px;color:#18243A;">회의 조건을 확인해 주세요</div><sc-if value="{{ m.live }}"><span style="font-size:14px;line-height:21px;color:#5B6B81;">다르게 이해한 부분만 수정하면 돼요.</span></sc-if></div>
+                      <div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:18px;font-weight:600;line-height:26px;color:#18243A;">회의 조건을 확인해 주세요</div><sc-if value="{{ m.live }}"><span style="font-size:14px;line-height:21px;color:#5B6B81;">다르게 이해한 부분은 눌러서 수정하세요.</span></sc-if></div>
                     </div>
                     <button onClick="{{ m.cTitleEdit }}" aria-disabled="{{ m.noEdit }}" aria-label="회의 제목 {{ m.cTitle }} · 눌러서 수정" style="width:100%;min-height:56px;display:flex;align-items:center;gap:8px;padding:0;border:none;background:transparent;text-align:left;cursor:pointer;color:#18243A;">
                       <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;"><span style="font-size:13px;line-height:20px;color:#5B6B81;">회의 제목</span><span style="font-size:18px;line-height:26px;font-weight:600;overflow-wrap:anywhere;">{{ m.cTitle }}</span><sc-if value="{{ m.cTitleSub }}"><span style="font-size:13px;line-height:20px;color:#5B6B81;">{{ m.cTitleSub }}</span></sc-if></span>
                       <sc-if value="{{ m.cTitleTag.has }}"><span style="flex-shrink:0;height:24px;padding:0 8px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;background:{{ m.cTitleTag.bg }};color:{{ m.cTitleTag.fg }};">{{ m.cTitleTag.label }}</span></sc-if>
-                      <sc-if value="{{ m.live }}"><span aria-hidden="true" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ m.iconPencil }}</span></sc-if>
+                      
                     </button>
                     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:8px;">
                       <button onClick="{{ m.cDateEdit }}" aria-disabled="{{ m.noEdit }}" aria-label="날짜 {{ m.cDate }} · 눌러서 수정" style="min-height:92px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:12px 16px;border:none;border-radius:16px;background:#F5F7FB;cursor:pointer;color:#18243A;">
@@ -1462,13 +1462,13 @@ class Component extends DCLogic {
         const timeVal=`${cc.timePref||'상관없음'} · ${cc.duration?cc.duration+'분':'미정'}`,timeSub=cc.duration?'선호 시간대':'회의 길이를 정해 주세요';
         const extra=rows.slice(6),attRow=rows[5],noTag={has:false,label:'',bg:'',fg:''};
         const attVal=s.attendeesDone?attRow.value:cc.reuse?`이전 참석자 ${cc.reuse.n}명`:([cc.team,cc.count?cc.count+'명':''].filter(Boolean).join(' ')||'참석자 미지정');
-        const attHas=!s.attendeesDone&&(cc.reuse||attVal!=='참석자 미지정'),attBadgeText=cc.reuse?'재확인 필요':'참석자 미지정';
+        const attHas=!s.attendeesDone&&(cc.reuse||attVal!=='참석자 미지정'),attBadgeText=cc.reuse?'재확인 필요':'선택 전';
         const miss=[!cc.days&&'날짜를',!cc.duration&&'회의 길이를'].filter(Boolean).join(' ').replace('날짜를 회의 길이를','날짜와 회의 길이를');
         Object.assign(o,{cTitle:rows[0].value,cTitleSub:rows[0].sub,cTitleTag:tg(rows[0]),cTitleEdit:live?rows[0].onEdit:()=>{},
           cDate:dateVal,cDateSub:dateSub,cDateTag:tg(rows[2]),cDateEdit:live?rows[2].onEdit:()=>{},
           cTime:timeVal,cTimeSub:timeSub,cTimeTag:rows[1].hasTag?tg(rows[1]):tg(rows[3]),cTimeEdit:live?rows[1].onEdit:()=>{},
           cMode:`${rows[4].value} 회의`,cModeTag:tg(rows[4]),cModeEdit:live?rows[4].onEdit:()=>{},
-          cAtt:attVal,cAttBadge:attHas,cAttBadgeText:attBadgeText,cAttSub:s.attendeesDone?'':cc.reuse?'참석 가능 여부는 다음 단계에서 새로 확인해요':'다음 단계에서 직접 선택해요',cAttTag:s.attendeesDone?tg(attRow):noTag,cAttEdit:live?attRow.onEdit:()=>{},
+          cAtt:attVal,cAttBadge:attHas,cAttBadgeText:attBadgeText,cAttSub:s.attendeesDone?'':cc.reuse?'참석 가능 여부는 다음 단계에서 새로 확인해요':'',cAttTag:s.attendeesDone?tg(attRow):noTag,cAttEdit:live?attRow.onEdit:()=>{},
           cExtra:extra.map(r=>({label:r.label,value:r.value,tag:tg(r),onEdit:live?r.onEdit:()=>{}})),
           iconPencil:ic('pencil',18,'#5B6B81',1.75),iconCal:ic('calendar',16,'#5B6B81',1.75),iconClock:ic('clock',16,'#5B6B81',1.75),
           onSpeak:()=>{this.setState({speakEdit:true,kb:true});requestAnimationFrame(()=>{const el=document.getElementById('nodi-chat-input');if(el)el.focus()})}});

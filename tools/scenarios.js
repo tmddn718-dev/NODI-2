@@ -50,7 +50,7 @@ const ok = (c, msg) => { c ? pass++ : fail++; console.log((c ? '  ✓ ' : '  ✗
     else if (name === 'failed') ok(/정리하지 못했어요/.test(t) && !card, `${name}: 오류 안내 + 선택지 복구`);
     else ok(card, `${name}: 조건 카드까지 도달 (${input})`);
     if (name === '모호한 날짜') ok(/라고 하셨는데/.test(t), '모호한 날짜를 확정하지 않고 되물음');
-    if (name === 'ready') ok(/디자인팀 3명/.test(t) && /참석자 미지정/.test(t), '참석자는 힌트로만 두고 확정하지 않음');
+    if (name === 'ready') ok(/디자인팀 3명/.test(t) && /선택 전/.test(t), '참석자는 힌트로만 두고 확정하지 않음');
     if (name === '내일') ok(/11월 17일/.test(t), '내일 = 11월 17일 (기준일 11월 16일)');
     ok(!errs.length, `${name}: 런타임 오류 없음`); await p.close();
   }
