@@ -21,208 +21,208 @@
   "01-conds.dc.html": {
    "x": 1640,
    "y": 0,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "01 AI 조건 확인",
    "is_interactive": true
   },
   "02-edit.dc.html": {
    "x": 2134,
    "y": 0,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "02 조건 수정",
    "is_interactive": true
   },
   "03-attendees.dc.html": {
    "x": 2628,
    "y": 0,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "03 참석자 선택 · 추천",
    "is_interactive": true
   },
   "04-required.dc.html": {
    "x": 3122,
    "y": 0,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "04 일정 필수 설정",
    "is_interactive": true
   },
   "05-progress.dc.html": {
    "x": 3616,
    "y": 0,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "05 조율 진행 현황",
    "is_interactive": true
   },
   "06-recs.dc.html": {
    "x": 1640,
    "y": 1300,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "06 추천 시간",
    "is_interactive": true
   },
   "07-review.dc.html": {
    "x": 2134,
    "y": 1300,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "07 최종 검토",
    "is_interactive": true
   },
   "08-done.dc.html": {
    "x": 2628,
    "y": 1300,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "08 완료 · 처리 현황",
    "is_interactive": true
   },
   "09-meetings.dc.html": {
    "x": 1640,
    "y": 2600,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "09 내 회의",
    "is_interactive": true
   },
   "10-detail.dc.html": {
    "x": 2134,
    "y": 2600,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "10 회의 상세",
    "is_interactive": true
   },
   "11-resched-ask.dc.html": {
    "x": 2628,
    "y": 2600,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "11 재조율 시작 확인",
    "is_interactive": true
   },
   "12-resched.dc.html": {
    "x": 3122,
    "y": 2600,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "12 재조율 후보",
    "is_interactive": true
   },
   "13-resched-review.dc.html": {
    "x": 3616,
    "y": 2600,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "13 변경 내용 검토",
    "is_interactive": true
   },
   "14-inbox.dc.html": {
    "x": 1640,
    "y": 3900,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "14 받은 요청",
    "is_interactive": true
   },
   "15-request.dc.html": {
    "x": 2134,
    "y": 3900,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "15 가능 시간 응답",
    "is_interactive": true
   },
   "16-request-stale.dc.html": {
    "x": 2628,
    "y": 3900,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "16 조건 변경된 요청",
    "is_interactive": true
   },
   "17-ai-fail.dc.html": {
    "x": 1640,
    "y": 5200,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "17 AI 해석 실패",
    "is_interactive": true
   },
   "18-sheet-nosearch.dc.html": {
    "x": 2134,
    "y": 5200,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "18 참석자 검색 결과 없음",
    "is_interactive": true
   },
   "19-sheet-zero.dc.html": {
    "x": 2628,
    "y": 5200,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "19 참석자 선택 0명",
    "is_interactive": true
   },
   "20-rec-loading.dc.html": {
    "x": 3122,
    "y": 5200,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "20 추천 계산 중",
    "is_interactive": true
   },
   "21-rec-error.dc.html": {
    "x": 3616,
    "y": 5200,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "21 추천 계산 오류",
    "is_interactive": true
   },
   "22-rec-none.dc.html": {
    "x": 1640,
    "y": 6500,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "22 추천 후보 없음",
    "is_interactive": true
   },
   "23-resched-empty.dc.html": {
    "x": 2134,
    "y": 6500,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "23 재조율 후보 없음",
    "is_interactive": true
   },
   "24-home.dc.html": {
    "x": 1640,
    "y": 7800,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "24 홈 · 이전 회의·이어하기",
    "is_interactive": true
   },
   "25-reuse-sheet.dc.html": {
    "x": 2134,
    "y": 7800,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "25 이전 회의 선택",
    "is_interactive": true
   },
   "26-reuse-conds.dc.html": {
    "x": 2628,
    "y": 7800,
-   "w": 414,
-   "h": 868,
+   "w": 390,
+   "h": 794,
    "title": "26 이전 회의 기반 조건 확인",
    "is_interactive": true
   }
