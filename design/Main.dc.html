@@ -313,10 +313,10 @@ body{font-variant-numeric:tabular-nums}
               <sc-if value="{{ showExcluded }}" hint-placeholder-val="{{ false }}"><div style="flex-shrink:0;font-size:14px;color:#18243A;line-height:1.5;background:#EDF1F7;border-radius:12px;padding:12px 16px;">{{ excludedText }}</div></sc-if>
               <sc-if value="{{ noRecs }}" hint-placeholder-val="{{ false }}">
                 <div style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:32px 20px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;">
-                  <img src="assets/nodi-3d-calendar-empty.svg" alt="" width="96" height="96" style="display:block;">
+                  <span aria-hidden="true" style="width:56px;height:56px;border-radius:28px;background:#EDF1F7;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ visNone }}</span>
                   <div style="font-size:18px;font-weight:600;">조건에 맞는 시간을 찾지 못했어요</div>
                   <div style="font-size:14px;color:#5B6B81;line-height:1.5;">{{ noRecsText }}</div>
-                  <div style="display:flex;gap:8px;width:100%;"><button onClick="{{ onOpenEdit }}" style="flex:1;height:52px;border-radius:14px;border:none;background:#3654D4;color:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;">회의 조건 수정</button><button onClick="{{ onOpenRoles }}" style="flex:1;height:48px;border-radius:14px;border:1px solid #E2E8F0;background:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;color:#18243A;">역할 조정</button></div>
+                  <div style="display:flex;gap:8px;width:100%;"><button onClick="{{ onOpenEdit }}" style="flex:1;height:52px;border-radius:14px;border:none;background:#3654D4;color:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;">회의 조건 수정</button><button onClick="{{ onOpenRoles }}" style="flex:1;height:48px;border-radius:14px;border:1px solid #E2E8F0;background:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;color:#18243A;">필수 참석자 변경</button></div>
                 </div>
               </sc-if>
             </div>
@@ -428,9 +428,9 @@ body{font-variant-numeric:tabular-nums}
 
           <!-- ===== 완료 ===== -->
           <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
-            <div style="position:absolute;top:50px;left:0;right:0;bottom:0;overflow-y:auto;padding:40px 20px 192px;display:flex;flex-direction:column;align-items:center;gap:20px;box-sizing:border-box;">
-              <img src="assets/nodi-3d-calendar.svg" alt="" width="132" height="132" style="flex-shrink:0;display:block;margin-top:8px;animation:nodiPop .5s cubic-bezier(.22,1,.36,1) both;">
-              <div style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;animation:nodiRise .5s .08s cubic-bezier(.22,1,.36,1) both;"><h1 style="margin:0;font-size:24px;line-height:36px;font-weight:700;letter-spacing:-0.01em;">NODI에 회의가<br>저장됐어요</h1><div style="font-size:16px;line-height:24px;color:#18243A;">{{ dnTitle }}</div><div style="font-size:16px;line-height:24px;font-weight:600;color:#18243A;font-variant-numeric:tabular-nums;">{{ dnWhenFull }}</div><div style="font-size:14px;line-height:21px;color:#5B6B81;">캘린더 연결과 알림 처리는 아래에서 확인할 수 있어요.</div></div>
+            <div style="position:absolute;top:50px;left:0;right:0;bottom:0;overflow-y:auto;padding:32px 20px 192px;display:flex;flex-direction:column;align-items:center;gap:16px;box-sizing:border-box;">
+              <span aria-hidden="true" style="width:64px;height:64px;border-radius:32px;background:#E8F7EF;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ visSuccess }}</span>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;animation:nodiRise .5s .08s cubic-bezier(.22,1,.36,1) both;"><h1 style="margin:0;font-size:24px;line-height:36px;font-weight:700;letter-spacing:-0.01em;">NODI에 회의가<br>저장됐어요</h1><div style="font-size:16px;line-height:24px;color:#18243A;">{{ dnTitle }}</div><div style="font-size:16px;line-height:24px;font-weight:600;color:#18243A;font-variant-numeric:tabular-nums;">{{ dnWhenFull }}</div><div style="font-size:14px;line-height:21px;color:#5B6B81;">캘린더 연결과 알림 상태를 아래에서 확인할 수 있어요.</div></div>
               <div style="width:100%;display:flex;flex-direction:column;gap:8px;padding-top:12px;"><div style="font-size:18px;line-height:26px;font-weight:600;color:#18243A;padding:8px 4px 0;">후속 처리 현황</div>
                 <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;">
                   <sc-for list="{{ dnFollow }}" as="f" hint-placeholder-count="3"><div style="display:flex;align-items:flex-start;gap:12px;padding:16px 20px;border-top:{{ f.sep }};"><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;"><span style="font-size:16px;line-height:24px;font-weight:600;">{{ f.label }}</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">{{ f.sub }}</span></div><span style="flex-shrink:0;margin-top:2px;height:24px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;white-space:nowrap;background:{{ f.bg }};color:{{ f.fg }};">{{ f.badge }}</span></div></sc-for>
@@ -457,7 +457,7 @@ body{font-variant-numeric:tabular-nums}
                     <span style="flex-shrink:0;margin-top:2px;height:24px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;white-space:nowrap;background:{{ mt.bg }};color:{{ mt.fg }};">{{ mt.short }}</span>
                   </button>
                 </sc-for>
-                <sc-if value="{{ meetEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:40px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;"><img src="assets/nodi-3d-calendar-empty.svg" alt="" width="104" height="104" style="display:block;"><span style="font-size:18px;line-height:26px;font-weight:600;color:#18243A;">아직 회의가 없어요</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">새 회의를 잡으면 여기에 모아 보여드려요</span><button onClick="{{ onGoNew }}" style="height:52px;padding:0 20px;border-radius:14px;border:none;background:#3654D4;color:#FFFFFF;font-size:16px;line-height:24px;font-weight:600;cursor:pointer;">회의 잡기</button></div></sc-if>
+                <sc-if value="{{ meetEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:40px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;"><span aria-hidden="true" style="width:56px;height:56px;border-radius:28px;background:#EDF1F7;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ visEmptyCal }}</span><span style="font-size:18px;line-height:26px;font-weight:600;color:#18243A;">아직 회의가 없어요</span><span style="font-size:14px;line-height:21px;color:#5B6B81;">새 회의를 잡으면 여기에 모아 보여드려요</span><button onClick="{{ onGoNew }}" style="height:52px;padding:0 20px;border-radius:14px;border:none;background:#3654D4;color:#FFFFFF;font-size:16px;line-height:24px;font-weight:600;cursor:pointer;">회의 잡기</button></div></sc-if>
               </div>
             </div>
           </sc-if>
@@ -529,11 +529,11 @@ body{font-variant-numeric:tabular-nums}
           </sc-if>
           <sc-if value="{{ showReschedAsk }}" hint-placeholder-val="{{ false }}">
               <div style="position:absolute;inset:0;z-index:16;background:rgb(24 36 58 / 0.56);display:flex;align-items:center;justify-content:center;padding:0 20px;">
-                <div role="alertdialog" aria-modal="true" aria-labelledby="nodi-rs-t" aria-describedby="nodi-rs-d" style="width:100%;background:#FFFFFF;border-radius:24px;padding:28px 24px 24px;display:flex;flex-direction:column;box-sizing:border-box;">
-                  <img src="assets/nodi-3d-clock.svg" alt="" width="80" height="80" style="display:block;align-self:center;animation:nodiPop .4s cubic-bezier(.22,1,.36,1) both;">
-                  <div id="nodi-rs-t" style="margin-top:16px;font-size:24px;line-height:32px;font-weight:700;text-align:center;">새 시간을 찾아볼까요?</div>
-                  <div id="nodi-rs-d" style="display:flex;flex-direction:column;gap:8px;margin-top:12px;"><span style="font-size:16px;line-height:24px;color:#5B6B81;text-align:center;">새 일정으로 변경하기 전까지<br>기존 회의는 유지돼요.</span></div>
-                  <div style="display:flex;flex-direction:column;gap:8px;margin-top:24px;">
+                <div role="alertdialog" aria-modal="true" aria-labelledby="nodi-rs-t" aria-describedby="nodi-rs-d" style="width:100%;background:#FFFFFF;border-radius:24px;padding:24px 24px 20px;display:flex;flex-direction:column;align-items:center;box-sizing:border-box;">
+                  <span aria-hidden="true" style="width:48px;height:48px;border-radius:24px;background:#E9EEFF;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ visResched }}</span>
+                  <div id="nodi-rs-t" style="margin-top:12px;font-size:24px;line-height:32px;font-weight:700;text-align:center;">다른 시간을 찾아볼까요?</div>
+                  <div id="nodi-rs-d" style="display:flex;flex-direction:column;gap:8px;margin-top:8px;"><span style="font-size:16px;line-height:24px;color:#5B6B81;text-align:center;text-wrap:pretty;">새 시간을 확정하기 전까지 기존 일정은 유지돼요.</span></div>
+                  <div style="display:flex;flex-direction:column;gap:8px;margin-top:20px;align-self:stretch;">
                     <button ref="{{ dlgRef }}" onClick="{{ onStartResched }}" style="width:100%;height:52px;border-radius:14px;border:none;background:#3654D4;color:#FFFFFF;font-size:16px;line-height:24px;font-weight:600;cursor:pointer;">새 시간 찾기</button>
                     <button onClick="{{ onCloseReschedAsk }}" style="width:100%;height:48px;border-radius:14px;border:none;background:transparent;color:#18243A;font-size:16px;line-height:24px;font-weight:600;cursor:pointer;">취소</button>
                   </div>
@@ -553,8 +553,8 @@ body{font-variant-numeric:tabular-nums}
               <sc-if value="{{ rsHasCands }}" hint-placeholder-val="{{ true }}"><div style="font-size:18px;line-height:26px;font-weight:600;color:#18243A;padding:8px 4px 0;">새 후보 · 이 시간에 대한 응답 기준</div>
               <div style="font-size:14px;line-height:21px;color:#925500;background:#FFF3DC;border-radius:12px;padding:12px;">기존 응답은 새 후보에 그대로 적용되지 않을 수 있어요.</div></sc-if>
               <sc-if value="{{ rsEmpty }}" hint-placeholder-val="{{ false }}">
-                <div role="status" style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:32px 20px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;">
-                  <img src="assets/nodi-3d-calendar-empty.svg" alt="" width="96" height="96" style="display:block;">
+                <div role="status" style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:24px 20px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;">
+                  <span aria-hidden="true" style="width:56px;height:56px;border-radius:28px;background:#EDF1F7;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ visRsEmpty }}</span>
                   <div style="font-size:18px;line-height:26px;font-weight:600;">{{ rsEmptyTitle }}</div>
                   <div style="font-size:14px;color:#5B6B81;line-height:1.5;">{{ rsEmptyText }}</div>
                   <button onClick="{{ onRsWiden }}" style="width:100%;height:52px;border-radius:14px;border:none;background:#3654D4;color:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;">다른 기간으로 다시 찾기</button>
@@ -1004,6 +1004,9 @@ const L={
  search:[['circle',{cx:11,cy:11,r:8}],['path',{d:'m21 21-4.3-4.3'}]],
  sparkles:[['path',{d:'M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'}],['path',{d:'M20 3v4'}],['path',{d:'M22 5h-4'}]],
  calendar:[['rect',{x:3,y:4,width:18,height:18,rx:2}],['path',{d:'M16 2v4'}],['path',{d:'M8 2v4'}],['path',{d:'M3 10h18'}]],
+ calendarClock:[['path',{d:'M16 14v2.2l1.6 1'}],['path',{d:'M16 2v4'}],['path',{d:'M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5'}],['path',{d:'M3 10h5'}],['path',{d:'M8 2v4'}],['circle',{cx:16,cy:16,r:6}]],
+ calendarX2:[['path',{d:'M8 2v4'}],['path',{d:'M16 2v4'}],['path',{d:'M21 13V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8'}],['path',{d:'M3 10h18'}],['path',{d:'m17 22 5-5'}],['path',{d:'m17 17 5 5'}]],
+ calendarRange:[['rect',{x:3,y:4,width:18,height:18,rx:2}],['path',{d:'M16 2v4'}],['path',{d:'M3 10h18'}],['path',{d:'M8 2v4'}],['path',{d:'M17 14h-6'}],['path',{d:'M13 18H7'}],['path',{d:'M7 14h.01'}],['path',{d:'M17 18h-.01'}]],
  calendarCheck:[['rect',{x:3,y:4,width:18,height:18,rx:2}],['path',{d:'M16 2v4'}],['path',{d:'M8 2v4'}],['path',{d:'M3 10h18'}],['path',{d:'m9 16 2 2 4-4'}]],
  clock:[['circle',{cx:12,cy:12,r:10}],['path',{d:'M12 6v6l4 2'}]],
  users:[['path',{d:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'}],['circle',{cx:9,cy:7,r:4}],['path',{d:'M22 21v-2a4 4 0 0 0-3-3.87'}],['path',{d:'M16 3.13a4 4 0 0 1 0 7.75'}]],
@@ -1656,7 +1659,7 @@ class Component extends DCLogic {
       stepVal,stepPct,stepNow,stepNext,
       onSkipSplash:()=>this.setState({screen:'chat'}),onReplaySplash:()=>{this.setState({screen:'splash'});this.t(()=>this.state.screen==='splash'&&this.setState({screen:'chat',tab:'new'}),1600)},
       onReset:this.reset,onSettings:()=>this.setState({prevScreen:scr,screen:'settings',kb:false}),
-      chatRef:this.chatRef,dlgRef:this.dlgRef,trigRef:this.trigRef,msgs:isHome?[]:msgs,isHome,notHome:!isHome,homeEg:HOME_EG,onEg:()=>{this.setState({input:HOME_EG,kb:true});requestAnimationFrame(()=>{const el=document.getElementById('nodi-chat-input');if(el)el.focus()})},homeChips:((msgs.find(x=>x.isChoice)||{opts:[]}).opts||[]).filter(o=>o.label!=='직접 입력'&&o.label!=='다른 회의 직접 입력').slice(0,3),hasReuse:isHome&&!this.props.newUser&&reusable.length>0,onOpenReuse:()=>this.setState({reuseOpen:true,reuseQ:''}),hasDraft:isHome&&!!dsv,draftTitle:dsv?dsv.title:'',draftStep:dsv?`${STEPS[dsv.step]} · ${dsv.step+1}/5`:'',onResume:this.resumeDraft,showReuse:s.reuseOpen&&scr==='chat',reuseList,reuseEmpty:!reuseList.length,reuseNoData:!reusable.length,reuseQ:s.reuseQ||'',onReuseQ:e=>this.setState({reuseQ:e.target.value}),onCloseReuse:()=>this.setState({reuseOpen:false,reuseQ:''}),onReuseStop:e=>{e.stopPropagation()},iconHistory:ic('history',20,'#5B6B81',1.75),suggestions:SUGG.map(t=>({text:t,onClick:()=>this.send(t)})),
+      chatRef:this.chatRef,dlgRef:this.dlgRef,trigRef:this.trigRef,msgs:isHome?[]:msgs,isHome,notHome:!isHome,homeEg:HOME_EG,onEg:()=>{this.setState({input:HOME_EG,kb:true});requestAnimationFrame(()=>{const el=document.getElementById('nodi-chat-input');if(el)el.focus()})},homeChips:((msgs.find(x=>x.isChoice)||{opts:[]}).opts||[]).filter(o=>o.label!=='직접 입력'&&o.label!=='다른 회의 직접 입력').slice(0,3),hasReuse:isHome&&!this.props.newUser&&reusable.length>0,onOpenReuse:()=>this.setState({reuseOpen:true,reuseQ:''}),hasDraft:isHome&&!!dsv,draftTitle:dsv?dsv.title:'',draftStep:dsv?`${STEPS[dsv.step]} · ${dsv.step+1}/5`:'',onResume:this.resumeDraft,showReuse:s.reuseOpen&&scr==='chat',reuseList,reuseEmpty:!reuseList.length,reuseNoData:!reusable.length,reuseQ:s.reuseQ||'',onReuseQ:e=>this.setState({reuseQ:e.target.value}),onCloseReuse:()=>this.setState({reuseOpen:false,reuseQ:''}),onReuseStop:e=>{e.stopPropagation()},iconHistory:ic('history',20,'#5B6B81',1.75),visSuccess:ic('check',32,'#13845B',2.25),visResched:ic('calendarClock',24,'#2946B8',2),visNone:ic('calendarX2',28,'#5B6B81',2),visRsEmpty:ic('calendarRange',28,'#5B6B81',2),visEmptyCal:ic('calendar',28,'#5B6B81',2),suggestions:SUGG.map(t=>({text:t,onClick:()=>this.send(t)})),
       onChatScroll:e=>{const el=e.currentTarget;this.lastTop=el.scrollTop;const ab=el.scrollHeight-el.scrollTop-el.clientHeight<48;this.atBottom=ab;if(ab&&s.newMsg)this.setState({newMsg:false})},
       showNewMsg:s.newMsg&&scr==='chat',newMsgBottom:chatBottom+8,onJumpBottom:()=>{const el=this.chatRef.current;if(el)el.scrollTop=el.scrollHeight;this.atBottom=true;this.setState({newMsg:false})},
       showComposer:!hideComposer,inputPh:s.speakEdit?'예: 회의 시간을 90분으로 바꿔줘':'회의 조건을 말씀해 주세요',composerBottom,chatBottom,composerBorder:s.kb?'2px solid #3654D4':'1px solid #E2E8F0',showKb:scr==='chat'&&s.kb,kbRows,onFocusInput:()=>{if(!s.kb)this.setState({kb:true})},onHideKb:()=>this.setState({kb:false}),
@@ -1728,7 +1731,7 @@ class Component extends DCLogic {
       recSubtitle:recs.length?`${tie?'1순위 후보가 동률이에요 · ':''}참석자 ${n}명${reqIdsSel.length?` · 일정 필수 ${reqIdsSel.length}명`:''}`:'',
       hasRecs:ready&&recs.length>0,noRecs:ready&&!recs.length,isCardView:ready&&recs.length>0&&s.recView==='card',isTableView:ready&&recs.length>0&&s.recView==='table',
       recsPadBottom:showImpact?260:152,
-      noRecsText:s.policy==='all'?'전원이 가능한 시간이 선택한 기간에 없어요. 기간을 넓히거나 ‘일정 필수 참석자 우선’ 정책을 검토해 보세요.':reqIdsSel.length?`일정 필수 참석자 ${reqIdsSel.map(id=>label(P[id])).join(', ')}님이 가능한 시간이 없어요. 기간을 넓히거나 일정 필수 설정을 조정해 보세요.`:'선택한 기간에 맞는 시간이 없어요. 기간을 넓히거나 회의 길이를 줄여 보세요.',
+      noRecsText:s.policy==='all'?'전원이 가능한 시간이 선택한 기간에 없어요. 기간을 넓히거나 ‘일정 필수 참석자 우선’ 정책을 검토해 보세요.':reqIdsSel.length?`일정 필수 참석자 ${reqIdsSel.map(id=>label(P[id])).join(', ')}님이 가능한 시간이 없어요. 기간을 넓히거나 일정 필수 설정을 조정해 보세요.`:'현재 조건에서는 가능한 시간이 없어요. 날짜 범위나 필수 참석자 조건을 조정해 보세요.',
       viewOpts:this.seg([{v:'card',l:'카드'},{v:'table',l:'후보 비교'}],s.recView,v=>this.setState({recView:v})),
       showCriteria:s.showCriteria,onToggleCriteria:()=>this.setState({showCriteria:!s.showCriteria}),
       recs,tableHead,tableRows,tableCols:`92px repeat(${Math.max(recs.length,1)},minmax(0,1fr))`,
@@ -1788,7 +1791,7 @@ class Component extends DCLogic {
       rsArchive:det?`기존 시간(${det.date} ${det.time})에 대한 응답 ${det.people.length}건은 기록으로 보관해요. 새 시간에는 그대로 적용하지 않고, 후보별로 받은 응답과 캘린더 조회로만 계산해요.`:'',
       rsCtaDisabled:!rsPickE,rsCtaBg:rsPickE?'#3654D4':'#E9EDF3',rsCtaFg:rsPickE?'#FFFFFF':'#5B6B81',rsCtaLabel:rsPickE?'선택한 새 시간 검토':(rsEmptyNow?'선택할 새 후보가 없어요':'새 후보를 선택해 주세요'),
       rsHasCands:!rsEmptyNow,rsEmpty:rsEmptyNow,rsEmptyTitle:rsCandEval.length?'필수 참석자 일정이 맞는 새 후보가 없어요':'새로 제안할 시간이 없어요',
-      rsEmptyText:rsCandEval.length?'후보는 모두 일정 필수 참석자와 충돌해 선택할 수 없어요. 기존 회의는 그대로 유지돼요.':'지금 조건으로는 기존 회의 외에 맞는 시간을 찾지 못했어요. 기존 회의는 그대로 유지돼요.',
+      rsEmptyText:rsCandEval.length?'후보는 모두 일정 필수 참석자와 충돌해 선택할 수 없어요. 기존 회의는 그대로 유지돼요.':'현재 조건에서는 새 후보를 찾지 못했어요. 기존 일정은 유지돼요.',
       onRsWiden:()=>this.toast('데모에서는 후보를 새로 계산하지 않아요. 실제 구현에서는 기간을 넓혀 다시 찾아요'),
       onRsReview:()=>{if(!rsPickE)return this.toast('새 후보를 먼저 선택해 주세요');this.setState({screen:'rsReview',rs:{...s.rs,err:false}})},
       onRsBack:()=>{if(s.rs.phase==null)this.setState({screen:'resched'})},
