@@ -51,12 +51,12 @@ body{font-variant-numeric:tabular-nums}
         <span>직접 눌러보세요</span>
       </div></sc-if>
       <div style="width:{{ frameW }}px;height:{{ frameH }}px;padding:{{ framePad }}px;box-sizing:border-box;background:#18243A;border-radius:{{ frameR }}px;overflow:hidden;box-shadow:{{ frameShadow }};">
-        <div style="position:relative;width:390px;height:844px;margin-top:{{ innerMt }}px;border-radius:{{ innerR }}px;overflow:hidden;background:#F5F7FB;">
+        <div ref="{{ innerRef }}" style="position:relative;width:390px;height:{{ innerH }}px;margin-top:{{ innerMt }}px;border-radius:{{ innerR }}px;overflow:hidden;background:#F5F7FB;">
           <div style="position:absolute;top:0;left:0;right:0;height:50px;display:{{ sbDisplay }};align-items:center;justify-content:space-between;padding:4px 32px 0 40px;box-sizing:border-box;z-index:40;font-size:16px;font-weight:600;color:#18243A;pointer-events:none;">
             <span>9:41</span>
             <div style="display:flex;gap:8px;align-items:center;">
               <div style="display:flex;gap:2px;align-items:flex-end;height:11px;"><span style="width:3px;height:4px;background:#18243A;border-radius:1px;"></span><span style="width:3px;height:6px;background:#18243A;border-radius:1px;"></span><span style="width:3px;height:8px;background:#18243A;border-radius:1px;"></span><span style="width:3px;height:11px;background:#18243A;border-radius:1px;"></span></div>
-              <div style="width:24px;height:11px;border:1px solid #18243A;border-radius:3px;padding:1px;box-sizing:border-box;"><div style="width:80%;height:100%;background:#18243A;border-radius:1px;"></div></div>
+              <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true"><path d="M1 4.2a10 10 0 0 1 14 0M3.6 6.9a6.2 6.2 0 0 1 8.8 0M6.2 9.4a2.5 2.5 0 0 1 3.6 0" stroke="#18243A" stroke-width="1.6" stroke-linecap="round"/></svg><div style="display:flex;align-items:center;"><div style="width:25px;height:12px;border:1px solid #18243A;opacity:.9;border-radius:4px;padding:1.5px;box-sizing:border-box;"><div style="width:80%;height:100%;background:#18243A;border-radius:2px;"></div></div><div style="width:2px;height:4px;background:#18243A;border-radius:0 1px 1px 0;margin-left:1px;"></div></div>
             </div>
           </div>
           <div style="display:{{ sbDisplay }};position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:16px;z-index:41;"></div>
@@ -1133,7 +1133,7 @@ const BLANK={screen:'chat',tab:'new',input:'',conds:null,selected:[],required:{}
 
 class Component extends DCLogic {
   state={...BLANK,screen:'splash',msgs:initMsgs(),meetings:SEED_MEET,detailId:null,detailFrom:'meetings',mtab:'예정',requests:SEED_REQ,reqId:null,reqDraft:{},reqMemo:'',subState:null,toast:null,notif:true,prevScreen:'chat',reschedAsk:false,titleDraft:null,rs:{pick:null,phase:null,err:false,reqSent:{}}};
-  chatRef=React.createRef();dlgRef=React.createRef();trigRef=React.createRef();
+  innerRef=React.createRef();chatRef=React.createRef();dlgRef=React.createRef();trigRef=React.createRef();
   n=0;atBottom=true;forceScroll=false;
   id(){return 'x'+(++this.n)}
   seedDraft(){const c={type:'디자인 리뷰',duration:60,days:[5,5],prefDay:null,rel:'다음 주 화요일',timePref:'오후',mode:'온라인',team:'디자인팀',count:3,requiredName:null,src:{type:'ai',duration:'ai',days:'ai',timePref:'ai'},confirmed:true,ver:1};
@@ -1178,7 +1178,9 @@ class Component extends DCLogic {
       if(k==='recs'||k==='review'||k==='recNone'){const recs={key:this.recKey(),...this.computeRecs()},f=recs.list[0];this.setState({recs,recState:'ready',pick:k==='review'&&f?{d:f.d,h:f.h}:null})}});
   }
   componentWillUnmount(){(this.timers||[]).forEach(clearTimeout);clearTimeout(this.tt)}
+  measureH(){if(this.props.view!=='screen')return;const r=this.innerRef.current;if(!r)return;const cur=this.state.autoH||844;let need=844;if(!r.querySelector('[role=dialog],[aria-modal=true]')){r.querySelectorAll('*').forEach(e=>{if(e.scrollHeight>=e.clientHeight&&e.clientHeight>200){const oy=getComputedStyle(e).overflowY;if(oy==='auto'||oy==='scroll')need=Math.max(need,cur-e.clientHeight+e.scrollHeight)}})}need=Math.ceil(need);if(need!==cur)this.setState({autoH:need})}
   componentDidUpdate(pp,ps){
+    if(this.props.view==='screen'&&(ps.screen!==this.state.screen||ps.tab!==this.state.tab)&&this.state.autoH)this.setState({autoH:0});else this.measureH();
     const s=this.state,el=this.chatRef.current;
     if(el&&s.screen==='chat'){
       const msgsChanged=ps.msgs!==s.msgs,entered=ps.screen!=='chat',kbChanged=ps.kb!==s.kb;
@@ -1652,7 +1654,7 @@ class Component extends DCLogic {
     const iconGallery=['back','x','check','search','sparkles','calendar','calendarCheck','clock','users','history','trendingUp','refreshCw','rotateCcw','bell','send','arrowUp','triangleAlert','info','circleCheck','circleHelp','pencil','wifiOff','shieldCheck','mail','lock','inbox','messageSquarePlus','loaderCircle','layoutList','columns2'].map(nm=>({name:nm.replace(/([A-Z])/g,'-$1').toLowerCase().replace('back','chevron-left'),icon:ic(nm,24)}));
     const view=this.props.view||'page';
     return {
-      showHeader:view==='page',...(view==='screen'?{frameW:390,frameH:844,framePad:0,frameR:0,frameShadow:'none',innerMt:0,innerR:0,sbDisplay:'flex'}:{frameW:414,frameH:868,framePad:12,frameR:60,frameShadow:'0 12px 32px rgb(24 36 58 / 0.10), 0 2px 6px rgb(24 36 58 / 0.06)',innerMt:0,innerR:48,sbDisplay:'flex'}),showPhone:true,showDocs:view==='page',rootPad:view==='page'?'56px 64px 80px':'0',rootMinW:view==='page'?'1320px':'0',
+      showHeader:view==='page',...(view==='screen'?{frameW:390,frameH:s.autoH||844,innerH:s.autoH||844,framePad:0,frameR:0,frameShadow:'none',innerMt:0,innerR:0,sbDisplay:'flex'}:{frameW:414,frameH:868,innerH:844,framePad:12,frameR:60,frameShadow:'0 12px 32px rgb(24 36 58 / 0.10), 0 2px 6px rgb(24 36 58 / 0.06)',innerMt:0,innerR:48,sbDisplay:'flex'}),showPhone:true,showDocs:view==='page',rootPad:view==='page'?'56px 64px 80px':'0',rootMinW:view==='page'?'1320px':'0',
       I,iconGallery,
       isSplash:scr==='splash',isChat:scr==='chat',isProgress:scr==='progress',isRecs:scr==='recs',isReview:scr==='review',isDone:scr==='done',isMeetings:scr==='meetings',isDetail:scr==='detail',isResched:scr==='resched',isRsReview:scr==='rsReview',isInbox:scr==='inbox',isRequest:scr==='request',isSettings:scr==='settings',
       showTabs:['chat','meetings','inbox'].includes(scr)&&!(scr==='chat'&&s.kb)&&!(scr==='chat'&&((!!s.conds&&!s.conds.confirmed)||(!!s.guide&&!s.conds))),
@@ -1661,7 +1663,7 @@ class Component extends DCLogic {
       stepVal,stepPct,stepNow,stepNext,
       onSkipSplash:()=>this.setState({screen:'chat'}),onReplaySplash:()=>{this.setState({screen:'splash'});this.t(()=>this.state.screen==='splash'&&this.setState({screen:'chat',tab:'new'}),1600)},
       onReset:this.reset,onSettings:()=>this.setState({prevScreen:scr,screen:'settings',kb:false}),
-      chatRef:this.chatRef,dlgRef:this.dlgRef,trigRef:this.trigRef,msgs:isHome?[]:msgs,isHome,notHome:!isHome,homeEg:HOME_EG,onEg:()=>{this.setState({input:HOME_EG,kb:true});requestAnimationFrame(()=>{const el=document.getElementById('nodi-chat-input');if(el)el.focus()})},homeChips:((msgs.find(x=>x.isChoice)||{opts:[]}).opts||[]).filter(o=>o.label!=='직접 입력'&&o.label!=='다른 회의 직접 입력').slice(0,3),hasReuse:isHome&&!this.props.newUser&&reusable.length>0,onOpenReuse:()=>this.setState({reuseOpen:true,reuseQ:''}),hasDraft:isHome&&!!dsv,draftTitle:dsv?dsv.title:'',draftStep:dsv?`${STEPS[dsv.step]} · ${dsv.step+1}/5`:'',onResume:this.resumeDraft,showReuse:s.reuseOpen&&scr==='chat',reuseList,reuseEmpty:!reuseList.length,reuseNoData:!reusable.length,reuseQ:s.reuseQ||'',onReuseQ:e=>this.setState({reuseQ:e.target.value}),onCloseReuse:()=>this.setState({reuseOpen:false,reuseQ:''}),onReuseStop:e=>{e.stopPropagation()},iconHistory:ic('history',20,'#5B6B81',1.75),visSuccess:ic('check',32,'#13845B',2.25),visResched:ic('calendarClock',24,'#2946B8',2),visNone:ic('calendarX2',28,'#5B6B81',2),visRsEmpty:ic('calendarRange',28,'#5B6B81',2),visEmptyCal:ic('calendar',28,'#5B6B81',2),suggestions:SUGG.map(t=>({text:t,onClick:()=>this.send(t)})),
+      chatRef:this.chatRef,innerRef:this.innerRef,dlgRef:this.dlgRef,trigRef:this.trigRef,msgs:isHome?[]:msgs,isHome,notHome:!isHome,homeEg:HOME_EG,onEg:()=>{this.setState({input:HOME_EG,kb:true});requestAnimationFrame(()=>{const el=document.getElementById('nodi-chat-input');if(el)el.focus()})},homeChips:((msgs.find(x=>x.isChoice)||{opts:[]}).opts||[]).filter(o=>o.label!=='직접 입력'&&o.label!=='다른 회의 직접 입력').slice(0,3),hasReuse:isHome&&!this.props.newUser&&reusable.length>0,onOpenReuse:()=>this.setState({reuseOpen:true,reuseQ:''}),hasDraft:isHome&&!!dsv,draftTitle:dsv?dsv.title:'',draftStep:dsv?`${STEPS[dsv.step]} · ${dsv.step+1}/5`:'',onResume:this.resumeDraft,showReuse:s.reuseOpen&&scr==='chat',reuseList,reuseEmpty:!reuseList.length,reuseNoData:!reusable.length,reuseQ:s.reuseQ||'',onReuseQ:e=>this.setState({reuseQ:e.target.value}),onCloseReuse:()=>this.setState({reuseOpen:false,reuseQ:''}),onReuseStop:e=>{e.stopPropagation()},iconHistory:ic('history',20,'#5B6B81',1.75),visSuccess:ic('check',32,'#13845B',2.25),visResched:ic('calendarClock',24,'#2946B8',2),visNone:ic('calendarX2',28,'#5B6B81',2),visRsEmpty:ic('calendarRange',28,'#5B6B81',2),visEmptyCal:ic('calendar',28,'#5B6B81',2),suggestions:SUGG.map(t=>({text:t,onClick:()=>this.send(t)})),
       onChatScroll:e=>{const el=e.currentTarget;this.lastTop=el.scrollTop;const ab=el.scrollHeight-el.scrollTop-el.clientHeight<48;this.atBottom=ab;if(ab&&s.newMsg)this.setState({newMsg:false})},
       showNewMsg:s.newMsg&&scr==='chat',newMsgBottom:chatBottom+8,onJumpBottom:()=>{const el=this.chatRef.current;if(el)el.scrollTop=el.scrollHeight;this.atBottom=true;this.setState({newMsg:false})},
       chatTop:isHome?106:146,showComposer:!hideComposer,inputPh:s.speakEdit?'예: 회의 시간을 90분으로 바꿔줘':'회의 조건을 말씀해 주세요',composerBottom,chatBottom,composerBorder:s.kb?'2px solid #3654D4':'1px solid #E2E8F0',showKb:scr==='chat'&&s.kb,kbRows,onFocusInput:()=>{if(!s.kb)this.setState({kb:true})},onHideKb:()=>this.setState({kb:false}),
