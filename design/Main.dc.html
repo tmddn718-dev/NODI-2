@@ -59,7 +59,7 @@ body{font-variant-numeric:tabular-nums}
               <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true"><path d="M1 4.2a10 10 0 0 1 14 0M3.6 6.9a6.2 6.2 0 0 1 8.8 0M6.2 9.4a2.5 2.5 0 0 1 3.6 0" stroke="#18243A" stroke-width="1.6" stroke-linecap="round"/></svg><div style="display:flex;align-items:center;"><div style="width:25px;height:12px;border:1px solid #18243A;opacity:.9;border-radius:4px;padding:1.5px;box-sizing:border-box;"><div style="width:80%;height:100%;background:#18243A;border-radius:2px;"></div></div><div style="width:2px;height:4px;background:#18243A;border-radius:0 1px 1px 0;margin-left:1px;"></div></div>
             </div>
           </div>
-          <div style="display:{{ sbDisplay }};position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:16px;z-index:41;"></div>
+          <div style="display:{{ islandDisplay }};position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:16px;z-index:41;"></div>
 
           <sc-if value="{{ isSplash }}" hint-placeholder-val="{{ false }}">
             <button onClick="{{ onSkipSplash }}" style="position:absolute;inset:0;z-index:30;background:#FFFFFF;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;cursor:pointer;">
@@ -1060,6 +1060,7 @@ const PEOPLE=[
 ];
 const P=Object.fromEntries(PEOPLE.map(p=>[p.id,p]));
 const DUPS=PEOPLE.reduce((a,p)=>{a[p.name]=(a[p.name]||0)+1;return a},{});
+const SCREEN_H={"conds": 1098, "progress": 1200, "recs": 1630, "review": 908, "done": 984, "detail": 1599, "resched": 1495, "rsReview": 1038, "request": 1125, "recLoad": 1139, "reschedEmpty": 894, "reuseCard": 1236};
 const AV=[['#E9EEFF','#2946B8'],['#E9EEFF','#18243A'],['#E2E8F0','#18243A']];
 const av=id=>AV[PEOPLE.findIndex(p=>p.id===id)%3];
 const ST={success:['#E8F7EF','#137B57'],warning:['#FFF3DC','#925500'],error:['#FDECEE','#B52E3A'],info:['#E9EEFF','#2946B8'],neutral:['#E2E8F0','#18243A'],rec:['#F5F7FB','#18243A']};
@@ -1178,9 +1179,7 @@ class Component extends DCLogic {
       if(k==='recs'||k==='review'||k==='recNone'){const recs={key:this.recKey(),...this.computeRecs()},f=recs.list[0];this.setState({recs,recState:'ready',pick:k==='review'&&f?{d:f.d,h:f.h}:null})}});
   }
   componentWillUnmount(){(this.timers||[]).forEach(clearTimeout);clearTimeout(this.tt)}
-  measureH(){if(this.props.view!=='screen')return;const r=this.innerRef.current;if(!r)return;const cur=this.state.autoH||844;let need=844;if(!r.querySelector('[role=dialog],[aria-modal=true]')){r.querySelectorAll('*').forEach(e=>{if(e.scrollHeight>=e.clientHeight&&e.clientHeight>200){const oy=getComputedStyle(e).overflowY;if(oy==='auto'||oy==='scroll')need=Math.max(need,cur-e.clientHeight+e.scrollHeight)}})}need=Math.ceil(need);if(need!==cur)this.setState({autoH:need})}
   componentDidUpdate(pp,ps){
-    if(this.props.view==='screen'&&(ps.screen!==this.state.screen||ps.tab!==this.state.tab)&&this.state.autoH)this.setState({autoH:0});else this.measureH();
     const s=this.state,el=this.chatRef.current;
     if(el&&s.screen==='chat'){
       const msgsChanged=ps.msgs!==s.msgs,entered=ps.screen!=='chat',kbChanged=ps.kb!==s.kb;
@@ -1654,7 +1653,7 @@ class Component extends DCLogic {
     const iconGallery=['back','x','check','search','sparkles','calendar','calendarCheck','clock','users','history','trendingUp','refreshCw','rotateCcw','bell','send','arrowUp','triangleAlert','info','circleCheck','circleHelp','pencil','wifiOff','shieldCheck','mail','lock','inbox','messageSquarePlus','loaderCircle','layoutList','columns2'].map(nm=>({name:nm.replace(/([A-Z])/g,'-$1').toLowerCase().replace('back','chevron-left'),icon:ic(nm,24)}));
     const view=this.props.view||'page';
     return {
-      showHeader:view==='page',...(view==='screen'?{frameW:390,frameH:s.autoH||844,innerH:s.autoH||844,framePad:0,frameR:0,frameShadow:'none',innerMt:0,innerR:0,sbDisplay:'flex'}:{frameW:414,frameH:868,innerH:844,framePad:12,frameR:60,frameShadow:'0 12px 32px rgb(24 36 58 / 0.10), 0 2px 6px rgb(24 36 58 / 0.06)',innerMt:0,innerR:48,sbDisplay:'flex'}),showPhone:true,showDocs:view==='page',rootPad:view==='page'?'56px 64px 80px':'0',rootMinW:view==='page'?'1320px':'0',
+      showHeader:view==='page',...(view==='screen'?{frameW:390,frameH:SCREEN_H[this.props.initialScreen]||844,innerH:SCREEN_H[this.props.initialScreen]||844,islandDisplay:'none',framePad:0,frameR:0,frameShadow:'none',innerMt:0,innerR:0,sbDisplay:'flex'}:{islandDisplay:'block',frameW:414,frameH:868,innerH:844,framePad:12,frameR:60,frameShadow:'0 12px 32px rgb(24 36 58 / 0.10), 0 2px 6px rgb(24 36 58 / 0.06)',innerMt:0,innerR:48,sbDisplay:'flex'}),showPhone:true,showDocs:view==='page',rootPad:view==='page'?'56px 64px 80px':'0',rootMinW:view==='page'?'1320px':'0',
       I,iconGallery,
       isSplash:scr==='splash',isChat:scr==='chat',isProgress:scr==='progress',isRecs:scr==='recs',isReview:scr==='review',isDone:scr==='done',isMeetings:scr==='meetings',isDetail:scr==='detail',isResched:scr==='resched',isRsReview:scr==='rsReview',isInbox:scr==='inbox',isRequest:scr==='request',isSettings:scr==='settings',
       showTabs:['chat','meetings','inbox'].includes(scr)&&!(scr==='chat'&&s.kb)&&!(scr==='chat'&&((!!s.conds&&!s.conds.confirmed)||(!!s.guide&&!s.conds))),
